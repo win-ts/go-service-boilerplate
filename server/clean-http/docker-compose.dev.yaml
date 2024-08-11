@@ -1,0 +1,20 @@
+name: domain-service
+
+services:
+  app:
+    container_name: domain-service
+    build:
+      context: .
+      dockerfile: ../../build/docker/Dockerfile.dev
+    volumes:
+      - ../../:/src/go
+    ports:
+      - 8080:8080
+    working_dir: /src/go/server/clean-http
+    command: air -c .air.toml
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true

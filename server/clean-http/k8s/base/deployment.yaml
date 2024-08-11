@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: domain-service
+  labels:
+    app: domain-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: domain-service
+  template:
+    metadata:
+      labels:
+        app: domain-service
+    spec:
+      initContainers:
+        - name: wait-for-services
+          image: busybox:1.31.1
+          command: [
+              "sh",
+              "-c",
+              "
+              while ! nslookup redis; do echo waiting for redis; sleep 1; done;
+              while ! nslookup mongodb; do echo waiting for mongodb; sleep 1; done;",
+            ]
+      containers:
+        - name: domain-service
+          image: localhost:5001/domain-service
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            limits:
+              cpu: "200m"
+              memory: "512Mi"
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            successThreshold: 1
+            failureThreshold: 3
+            periodSeconds: 300
+          envFrom:
+            - configMapRef:
+                name: domain-service
+            - secretRef:
+                name: domain-service
