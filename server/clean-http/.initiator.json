@@ -27,10 +27,15 @@
             "pattern": "/{{repo}}/{{domain}}/{{service}}/",
             "glob": "**/*.go"
         },
+        "/win-ts/go-service-boilerplate/pkg/": {
+            "from": "$inputs",
+            "pattern": "/{{repo}}/pkg/",
+            "glob": "**/*.go"
+        },
         "/server/clean-http": {
             "from": "$inputs",
             "pattern": "/{{domain}}/{{service}}",
-            "glob": "**/docker-compose.dev.yml"
+            "glob": "**/docker-compose.dev.yaml"
         },
         "domain-service": {
             "from": "$inputs",
