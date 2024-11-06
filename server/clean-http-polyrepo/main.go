@@ -1,4 +1,4 @@
-// Package main is the main entry point for servicename service
+// Package main is the main entry point for service-name service
 package main
 
 import (
@@ -10,9 +10,9 @@ import (
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/repository"
 )
 
-// @title API Endpoints for servicename
+// @title API Endpoints for service-name
 // @version 1.0
-// @description This is the API documentation for servicename
+// @description This is the API documentation for service-name
 
 func init() {
 	runtime.GOMAXPROCS(1)

@@ -2,7 +2,8 @@
     "name": "Server Clean Architecture - HTTP (Monorepo)",
     "description": "Server for HTTP using clean architecture",
     "group": "Server",
-    "recommended": true,
+    "recommended": false,
+    "deprecated": true,
     "input": {
         "repo": {
             "from": "$prompt",

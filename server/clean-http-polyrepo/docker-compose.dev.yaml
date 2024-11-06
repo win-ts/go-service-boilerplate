@@ -1,8 +1,8 @@
-name: servicename
+name: service-name
 
 services:
   app:
-    container_name: servicename
+    container_name: service-name
     build:
       context: .
       dockerfile: ../../build/docker/Dockerfile.dev

@@ -4,12 +4,12 @@
     "group": "Server",
     "recommended": true,
     "input": {
-        "repo": {
+        "project": {
             "from": "$prompt",
-            "question": "Please provide the repo name",
-            "example": "win-ts/go-monorepo-microservice-template",
+            "question": "Please provide the project name",
+            "example": "project-inari",
             "required": false,
-            "default": "win-ts/go-monorepo-microservice-template"
+            "default": "project-inari"
         },
         "service": {
             "from": "$prompt",
@@ -21,20 +21,15 @@
     "template": {
         "/win-ts/go-service-boilerplate/server/clean-http-polyrepo/": {
             "from": "$inputs",
-            "pattern": "/{{repo}}/{{service}}/",
-            "glob": "**/*.go"
-        },
-        "/win-ts/go-service-boilerplate/pkg/": {
-            "from": "$inputs",
-            "pattern": "/{{repo}}/pkg/",
+            "pattern": "/{{project}}/{{service}}/",
             "glob": "**/*.go"
         },
         "/server/clean-http-polyrepo": {
             "from": "$inputs",
-            "pattern": "/",
+            "pattern": "",
             "glob": "**/docker-compose.dev.yaml"
         },
-        "servicename": {
+        "service-name": {
             "from": "$inputs",
             "pattern": "{{service}}"
         }

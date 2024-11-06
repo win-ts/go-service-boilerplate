@@ -14,8 +14,8 @@ import (
 var doc = `{
     "swagger": "2.0",
     "info": {
-        "description": "This is the API documentation for servicename",
-        "title": "API Endpoints for servicename",
+        "description": "This is the API documentation for service-name",
+        "title": "API Endpoints for service-name",
         "contact": {},
         "license": {},
         "version": "1.0"
