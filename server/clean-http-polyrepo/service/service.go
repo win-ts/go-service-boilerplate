@@ -9,7 +9,7 @@ import (
 
 // Port represents the service layer functions
 type Port interface {
-	DoExample(pctx context.Context) (string, error)
+	DoExample(ctx context.Context) (string, error)
 }
 
 type service struct {

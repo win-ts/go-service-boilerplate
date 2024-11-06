@@ -1,10 +1,10 @@
 basePath: /server
-host: "{{.Host}}"
+host: '{{.Host}}'
 info:
   contact: {}
-  description: This is the API documentation for clean-http-polyrepo
+  description: This is the API documentation for servicename
   license: {}
-  title: API Endpoints for clean-http-polyrepo
+  title: API Endpoints for servicename
   version: "1.0"
 paths:
   /v1/example:

@@ -2,11 +2,27 @@
 package config
 
 import (
-	"os"
+	"sync"
 
-	"github.com/joho/godotenv"
+	"github.com/caarlos0/env/v11"
 	"github.com/labstack/gommon/log"
 )
+
+var once sync.Once
+var config *Config
+
+// New loads the configuration from the .env file
+func New() *Config {
+	once.Do(func() {
+		cfg := &Config{}
+		if err := env.Parse(cfg); err != nil {
+			log.Panicf("error - [config.New] unable to parse config: %v", err)
+		}
+		config = cfg
+	})
+
+	return config
+}
 
 // Config represents the configuration of the server
 type Config struct {
@@ -15,32 +31,7 @@ type Config struct {
 
 // AppConfig represents the configuration of the application
 type AppConfig struct {
-	Name     string
-	Port     string
-	EnvStage string
-}
-
-// LoadConfig loads the configuration from the .env file
-func LoadConfig(env string) (Config, error) {
-	if env == "" || env == "local" {
-		if err := godotenv.Load(".env.local", ".env.secrets"); err != nil {
-			return Config{}, err
-		}
-	}
-
-	return Config{
-		AppConfig: AppConfig{
-			Name:     requiredEnv("APP_NAME"),
-			Port:     requiredEnv("APP_PORT"),
-			EnvStage: requiredEnv("APP_ENV_STAGE"),
-		},
-	}, nil
-}
-
-func requiredEnv(env string) string {
-	val := os.Getenv(env)
-	if val == "" {
-		log.Panic("missing required environment variable: " + env)
-	}
-	return val
+	Name     string `env:"APP_NAME,notEmpty"`
+	Port     string `env:"APP_PORT,notEmpty"`
+	EnvStage string `env:"APP_ENV_STAGE,notEmpty"`
 }

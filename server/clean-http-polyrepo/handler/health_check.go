@@ -7,7 +7,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/win-ts/go-service-boilerplate/pkg/response"
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/pkg/response"
 )
 
 // HealthCheck checks the health of the service
@@ -16,7 +16,7 @@ func (h *httpHandler) HealthCheck(c echo.Context) error {
 	duration := time.Since(startTime)
 
 	if duration > 1000 {
-		return response.ErrResponse(c, http.StatusInternalServerError, fmt.Sprintf("error - [HealthCheck] service is unhealthy: %v", duration))
+		return response.ErrorResponse(c, http.StatusInternalServerError, fmt.Sprintf("error - [HealthCheck] service is unhealthy: %v", duration), "ERR0")
 	}
 
 	return response.SuccessResponse(c, http.StatusOK, "[HealthCheck] service is healthy")

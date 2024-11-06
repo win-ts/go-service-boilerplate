@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is the API documentation for clean-http-polyrepo",
-        "title": "API Endpoints for clean-http-polyrepo",
+        "description": "This is the API documentation for servicename",
+        "title": "API Endpoints for servicename",
         "contact": {},
         "license": {},
         "version": "1.0"

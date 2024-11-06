@@ -2,9 +2,7 @@
 package main
 
 import (
-	"os"
-
-	"github.com/labstack/gommon/log"
+	"runtime"
 
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/config"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/di"
@@ -16,19 +14,16 @@ import (
 // @version 1.0
 // @description This is the API documentation for servicename
 
+func init() {
+	runtime.GOMAXPROCS(1)
+}
+
 // @BasePath /server
 func main() {
-	env := os.Getenv("APP_ENV_STAGE")
-	if env == "" {
-		env = "local"
-	}
+	// Initiaize config
+	cfg := config.New()
 
-	// Initiaize Config
-	cfg, err := config.LoadConfig(env)
-	if err != nil {
-		log.Panicf("error - [main.loadConfig] error loading config: %v", err)
-	}
-
+	// Initialize dependency injection
 	di.New(di.Config{
 		AppConfig:               cfg.AppConfig,
 		ExampleRepositoryConfig: repository.ExampleRepositoryConfig{},

@@ -12,7 +12,7 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
-func setupServer(pctx context.Context, e *echo.Echo, c Config) {
+func setupServer(ctx context.Context, e *echo.Echo, c Config) {
 	// Request Timeout
 	e.Use(middleware.TimeoutWithConfig(middleware.TimeoutConfig{
 		Skipper:      middleware.DefaultSkipper,
@@ -34,15 +34,15 @@ func setupServer(pctx context.Context, e *echo.Echo, c Config) {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	e.Use(middleware.Logger())
-	go gracefulShutdown(pctx, e, c, quit)
+	go gracefulShutdown(ctx, e, c, quit)
 }
 
-func gracefulShutdown(pctx context.Context, e *echo.Echo, c Config, quit <-chan os.Signal) {
+func gracefulShutdown(ctx context.Context, e *echo.Echo, c Config, quit <-chan os.Signal) {
 	log.Infof("Starting server: %s", c.AppConfig.Name)
 	<-quit
 	log.Info("Shutting down server ...")
 
-	ctx, cancel := context.WithTimeout(pctx, 10*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
 	if err := e.Shutdown(ctx); err != nil {
