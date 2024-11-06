@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: service-name
+spec:
+  ttlSecondsAfterFinished: 604800
+  template:
+    containers:
+      - name: service-name
+        image: localhost:5001/service-name
+        imagePullPolicy: Always
+        envFrom:
+          - configMapRef:
+              name: service-name
+          - secretRef:
+              name: service-name
+        resources:
+          limits:
+            cpu: 200m
+            memory: 64Mi
+          requests:
+            cpu: 100m
+            memory: 8Mi
+    restartPolicy: Never

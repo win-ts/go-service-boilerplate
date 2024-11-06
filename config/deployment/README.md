@@ -1,6 +1,6 @@
 # deployment-cd-config-template
 
-Configuration repository for `<service-name>`<br>
+Configuration repository for `service-name`<br>
 ArgoCD will sync configmap, secrets, and resources config from this repository.
 
 Available Environments

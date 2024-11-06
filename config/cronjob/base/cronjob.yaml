@@ -1,12 +1,12 @@
-apiVersion: apps/v1
-kind: Cronjob
+apiVersion: batch/v1
+kind: CronJob
 metadata:
   name: service-name
 spec:
+  schedule: "30 12 * * *"
   failedJobsHistoryLimit: 3
   successfulJobsHistoryLimit: 1
   concurrencyPolicy: Forbid
-  schedule: "30 12 * * *"
   jobTemplate:
     spec:
       template:

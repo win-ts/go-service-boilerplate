@@ -1,0 +1,24 @@
+{
+    "name": "Configuration Repository for K8s Job",
+    "description": "Configuration of a K8s job, for ArgoCD",
+    "group": "Config",
+    "recommended": false,
+    "input": {
+        "service": {
+            "from": "$prompt",
+            "question": "Please provide the job name",
+            "example": "core-auth-job",
+            "required": true
+        }
+    },
+    "template": {
+        "job-cd-config-template": {
+            "from": "$inputs",
+            "pattern": "{{service}}-cd-config"
+        },
+        "service-name": {
+            "from": "$inputs",
+            "pattern": "{{service}}"
+        }
+    }
+}

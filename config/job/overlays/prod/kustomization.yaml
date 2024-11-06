@@ -1,0 +1,28 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: prod
+
+resources:
+  - ../../base
+
+images:
+  - name: localhost:5001/service-name
+    newName: localhost:5001/service-name
+    newTag: latest
+
+patchesStrategicMerge:
+  - set_resources.yaml
+
+configMapGenerator:
+  - name: service-name
+    envs:
+      - config.env
+
+secretGenerator:
+  - name: service-name
+    envs:
+      - secret.env
+
+generatorOptions:
+  disableNameSuffixHash: true
