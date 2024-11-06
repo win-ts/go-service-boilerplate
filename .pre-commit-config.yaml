@@ -5,24 +5,24 @@ repos:
     rev: v4.6.0
     hooks:
       - id: end-of-file-fixer
-        stages: [commit]
+        stages: [pre-commit]
       - id: trailing-whitespace
-        stages: [commit]
+        stages: [pre-commit]
       - id: check-merge-conflict
-        stages: [commit]
+        stages: [pre-commit]
       - id: check-yaml
         args: [--allow-multiple-documents]
-        stages: [commit]
+        stages: [pre-commit]
       - id: detect-private-key
-        stages: [commit]
+        stages: [pre-commit]
 
   - repo: https://github.com/tekwizely/pre-commit-golang
     rev: v1.0.0-rc.1
     hooks:
       - id: golangci-lint-repo-mod
-        stages: [commit]
+        stages: [pre-commit]
       - id: go-test-mod
-        stages: [commit]
+        stages: [pre-commit]
 
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
     rev: v9.16.0
