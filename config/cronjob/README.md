@@ -1,4 +1,4 @@
-# deployment-cd-config-template
+# cronjob-cd-config-template
 
 Configuration repository for `<service-name>`<br>
 ArgoCD will sync configmap, secrets, and resources config from this repository.
@@ -18,4 +18,5 @@ To set configmaps, add environment variables into `config.env` file of the desir
 To set secrets, add environment variables into `secrets.env` file of the desired environment.
 
 ### Resources
-To set resources (replicas, limits/requests), change the values in `set_resources.yaml` file of the desired environment.
+To set resources (schedule, limits/requests), change the values in `set_resources.yaml` file of the desired environment.<br>
+**Note:** For cron schedule, values should be reduced by 7 hours from desired time. (ex. If the cronjob needs to run on 22.00, then it should be scheduled to 15.00)

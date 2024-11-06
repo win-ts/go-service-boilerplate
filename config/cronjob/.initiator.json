@@ -1,0 +1,24 @@
+{
+    "name": "Configuration Repository for K8s Cronjob",
+    "description": "Configuration of a K8s Cronjob, for ArgoCD",
+    "group": "Config",
+    "recommended": false,
+    "input": {
+        "service": {
+            "from": "$prompt",
+            "question": "Please provide the cronjob name",
+            "example": "core-auth-cronjob",
+            "required": true
+        }
+    },
+    "template": {
+        "cronjob-cd-config-template": {
+            "from": "$inputs",
+            "pattern": "{{service}}-cd-config"
+        },
+        "service-name": {
+            "from": "$inputs",
+            "pattern": "{{service}}"
+        }
+    }
+}

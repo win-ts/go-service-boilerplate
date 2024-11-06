@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Cronjob
+metadata:
+  name: service-name
+spec:
+  failedJobsHistoryLimit: 3
+  successfulJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  schedule: "30 12 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: service-name
+              image: localhost:5001/service-name
+              imagePullPolicy: Always
+              envFrom:
+                - configMapRef:
+                    name: service-name
+                - secretRef:
+                    name: service-name
+              resources:
+                limits:
+                  cpu: 200m
+                  memory: 64Mi
+                requests:
+                  cpu: 100m
+                  memory: 8Mi
+          restartPolicy: Never

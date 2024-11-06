@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: CronJob
+metadata:
+  name: service-name
+spec:
+  schedule: "00 19 * * *"
+  failedJobsHistoryLimit: 3
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      containers:
+        - name: service-name
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
