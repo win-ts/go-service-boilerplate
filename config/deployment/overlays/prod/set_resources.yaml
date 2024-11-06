@@ -10,8 +10,8 @@ spec:
         - name: service-name
           resources:
             limits:
-              cpu: "200m"
-              memory: "512Mi"
+              cpu: 200m
+              memory: 512Mi
             requests:
-              cpu: "100m"
-              memory: "256Mi
+              cpu: 100m
+              memory: 256Mi

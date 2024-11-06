@@ -6,6 +6,11 @@ namespace: prod
 resources:
   - ../../base
 
+images:
+  - name: localhost:5001/service-name
+    newName: localhost:5001/service-name
+    newTag: latest
+
 patchesStrategicMerge:
   - set_resources.yaml
 
@@ -20,4 +25,4 @@ secretGenerator:
       - secrets.env
 
 generatorOptions:
-  disableNameSuffixHash: tru
+  disableNameSuffixHash: true

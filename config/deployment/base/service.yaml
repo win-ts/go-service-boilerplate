@@ -7,4 +7,5 @@ metadata:
     app.kubernetes.io/instance: service-name
 spec:
   selector:
-    app.kubernetes.io/name: 
+    app.kubernetes.io/name: service-name
+    app.kubernetes.io/instance: service-name

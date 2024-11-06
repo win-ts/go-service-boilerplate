@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: service-name
-          image: localhost:5001/service-name:TAG
+          image: localhost:5001/service-name
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
@@ -32,11 +32,11 @@ spec:
               protocol: TCP
           resources:
             limits:
-              cpu: "200m"
-              memory: "512Mi"
+              cpu: 200m
+              memory: 512Mi
             requests:
-              cpu: "100m"
-              memory: "256Mi"
+              cpu: 100m
+              memory: 256Mi
           readinessProbe:
             httpGet:
               path: /health/liveness
@@ -50,4 +50,4 @@ spec:
               port: 8080
               scheme: HTTP
             timeoutSeconds: 10
-            initialDe
+            initialDelaySeconds: 10
