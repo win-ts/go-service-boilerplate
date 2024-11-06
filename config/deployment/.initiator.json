@@ -1,0 +1,24 @@
+{
+    "name": "Configuration Repository for K8s Deployment Microservice",
+    "description": "Configuration of a K8s deployment microservice, for ArgoCD",
+    "group": "Config",
+    "recommended": false,
+    "input": {
+        "service": {
+            "from": "$prompt",
+            "question": "Please provide the service name",
+            "example": "core-auth-server",
+            "required": true
+        }
+    },
+    "template": {
+        "deployment-cd-config-template": {
+            "from": "$inputs",
+            "pattern": "{{service}}-cd-config"
+        },
+        "service-name": {
+            "from": "$inputs",
+            "pattern": "{{service}}"
+        }
+    }
+}
