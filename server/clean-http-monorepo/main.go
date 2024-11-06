@@ -6,10 +6,10 @@ import (
 
 	"github.com/labstack/gommon/log"
 
-	"github.com/win-ts/go-service-boilerplate/server/clean-http/config"
-	"github.com/win-ts/go-service-boilerplate/server/clean-http/di"
-	_ "github.com/win-ts/go-service-boilerplate/server/clean-http/docs"
-	"github.com/win-ts/go-service-boilerplate/server/clean-http/repository"
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-monorepo/config"
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-monorepo/di"
+	_ "github.com/win-ts/go-service-boilerplate/server/clean-http-monorepo/docs"
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-monorepo/repository"
 )
 
 // @title API Endpoints for domain-service

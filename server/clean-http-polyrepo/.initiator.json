@@ -1,5 +1,5 @@
 {
-    "name": "Server Clean Architecture - HTTP",
+    "name": "Server Clean Architecture - HTTP (Polyrepo)",
     "description": "Server for HTTP using clean architecture",
     "group": "Server",
     "recommended": true,
@@ -11,20 +11,17 @@
             "required": false,
             "default": "win-ts/go-monorepo-microservice-template"
         },
-        "domain": {
-            "from": "$prompt",
-            "question": "Please provide the domain name",
-            "example": "account",
-            "required": true
-        },
         "service": {
-            "from": "$dir"
+            "from": "$prompt",
+            "question": "Please provide the service name",
+            "example": "core-auth-server",
+            "required": true
         }
     },
     "template": {
-        "/win-ts/go-service-boilerplate/server/clean-http/": {
+        "/win-ts/go-service-boilerplate/server/clean-http-polyrepo/": {
             "from": "$inputs",
-            "pattern": "/{{repo}}/{{domain}}/{{service}}/",
+            "pattern": "/{{repo}}/{{service}}/",
             "glob": "**/*.go"
         },
         "/win-ts/go-service-boilerplate/pkg/": {
@@ -32,14 +29,14 @@
             "pattern": "/{{repo}}/pkg/",
             "glob": "**/*.go"
         },
-        "/server/clean-http": {
+        "/server/clean-http-polyrepo": {
             "from": "$inputs",
-            "pattern": "/{{domain}}/{{service}}",
+            "pattern": "/",
             "glob": "**/docker-compose.dev.yaml"
         },
-        "domain-service": {
+        "servicename": {
             "from": "$inputs",
-            "pattern": "{{domain}}-{{service}}"
+            "pattern": "{{service}}"
         }
     }
 }

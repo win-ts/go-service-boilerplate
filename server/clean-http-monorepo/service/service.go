@@ -4,7 +4,7 @@ package service
 import (
 	"context"
 
-	"github.com/win-ts/go-service-boilerplate/server/clean-http/repository"
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-monorepo/repository"
 )
 
 // Port represents the service layer functions

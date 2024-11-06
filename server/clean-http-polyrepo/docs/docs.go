@@ -14,8 +14,8 @@ import (
 var doc = `{
     "swagger": "2.0",
     "info": {
-        "description": "This is the API documentation for clean-http",
-        "title": "API Endpoints for clean-http",
+        "description": "This is the API documentation for clean-http-polyrepo",
+        "title": "API Endpoints for clean-http-polyrepo",
         "contact": {},
         "license": {},
         "version": "1.0"

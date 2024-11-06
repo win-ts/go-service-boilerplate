@@ -1,0 +1,45 @@
+{
+    "name": "Server Clean Architecture - HTTP (Monorepo)",
+    "description": "Server for HTTP using clean architecture",
+    "group": "Server",
+    "recommended": true,
+    "input": {
+        "repo": {
+            "from": "$prompt",
+            "question": "Please provide the repo name",
+            "example": "win-ts/go-monorepo-microservice-template",
+            "required": false,
+            "default": "win-ts/go-monorepo-microservice-template"
+        },
+        "domain": {
+            "from": "$prompt",
+            "question": "Please provide the domain name",
+            "example": "account",
+            "required": true
+        },
+        "service": {
+            "from": "$dir"
+        }
+    },
+    "template": {
+        "/win-ts/go-service-boilerplate/server/clean-http-monorepo/": {
+            "from": "$inputs",
+            "pattern": "/{{repo}}/{{domain}}/{{service}}/",
+            "glob": "**/*.go"
+        },
+        "/win-ts/go-service-boilerplate/pkg/": {
+            "from": "$inputs",
+            "pattern": "/{{repo}}/pkg/",
+            "glob": "**/*.go"
+        },
+        "/server/clean-http-monorepo": {
+            "from": "$inputs",
+            "pattern": "/{{domain}}/{{service}}",
+            "glob": "**/docker-compose.dev.yaml"
+        },
+        "domain-service": {
+            "from": "$inputs",
+            "pattern": "{{domain}}-{{service}}"
+        }
+    }
+}

@@ -4,7 +4,7 @@ package handler
 import (
 	"github.com/labstack/echo/v4"
 
-	"github.com/win-ts/go-service-boilerplate/server/clean-http/service"
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/service"
 )
 
 // Dependencies represents the dependencies required by the handler

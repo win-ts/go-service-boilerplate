@@ -9,10 +9,10 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/win-ts/go-service-boilerplate/server/clean-http/config"
-	"github.com/win-ts/go-service-boilerplate/server/clean-http/handler"
-	"github.com/win-ts/go-service-boilerplate/server/clean-http/repository"
-	"github.com/win-ts/go-service-boilerplate/server/clean-http/service"
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/config"
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/handler"
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/repository"
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/service"
 )
 
 // Config represents the configuration of the service

@@ -1,8 +1,8 @@
-name: domain-service
+name: servicename
 
 services:
   app:
-    container_name: domain-service
+    container_name: servicename
     build:
       context: .
       dockerfile: ../../build/docker/Dockerfile.dev
@@ -10,7 +10,7 @@ services:
       - ../../:/src/go
     ports:
       - 8080:8080
-    working_dir: /src/go/server/clean-http
+    working_dir: /src/go/server/clean-http-polyrepo
     command: air -c .air.toml
     networks:
       - app-network
