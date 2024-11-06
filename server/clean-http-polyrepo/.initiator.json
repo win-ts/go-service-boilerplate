@@ -19,6 +19,11 @@
         }
     },
     "template": {
+        "/win-ts/go-service-boilerplate/server/clean-http-polyrepo": {
+            "from": "$inputs",
+            "pattern": "/{{project}}/{{service}}",
+            "glob": "**/go.mod"
+        },
         "/win-ts/go-service-boilerplate/server/clean-http-polyrepo/": {
             "from": "$inputs",
             "pattern": "/{{project}}/{{service}}/",
