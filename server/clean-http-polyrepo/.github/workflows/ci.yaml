@@ -1,0 +1,52 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.23.0"
+
+      - name: Install dependencies
+        run: go mod download
+
+      - name: Run Unit Tests
+        run: go test ./...
+
+      - name: Set up GCP authentication
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: inari-poc
+          credentials_json: ${{ secrets.GCP_POC_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure GCP and Docker
+        run: |
+          gcloud config set project inari-poc
+          gcloud auth configure-docker asia-southeast1-docker.pkg.dev
+
+      - name: Build Docker image
+        run: docker build -f ./build/docker/Dockerfile -t test-argo .
+
+      - name: Tag Docker image
+        run: |
+          docker tag test-argo asia-southeast1-docker.pkg.dev/inari-poc/inari-poc-registry/test-argo:${{ github.sha }}
+          docker tag test-argo asia-southeast1-docker.pkg.dev/inari-poc/inari-poc-registry/test-argo:latest
+
+      - name: Push Docker image to Artifact Registry
+        run: |
+          docker push asia-southeast1-docker.pkg.dev/inari-poc/inari-poc-registry/test-argo:${{ github.sha }}
+          docker push asia-southeast1-docker.pkg.dev/inari-poc/inari-poc-registry/test-argo:latest

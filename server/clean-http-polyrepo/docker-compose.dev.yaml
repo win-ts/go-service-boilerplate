@@ -5,9 +5,9 @@ services:
     container_name: service-name
     build:
       context: .
-      dockerfile: ../../build/docker/Dockerfile.dev
+      dockerfile: ./build/docker/Dockerfile.dev
     volumes:
-      - ../../:/src/go
+      - ./:/src/go
     ports:
       - 8080:8080
     working_dir: /src/go/server/clean-http-polyrepo

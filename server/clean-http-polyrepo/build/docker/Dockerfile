@@ -7,11 +7,9 @@ RUN go mod download
 #==============================================================================
 FROM based_builder AS builder
 
-ARG SERVICE
-
 WORKDIR /src/go
 COPY . ./
-RUN go build -o /app "./${SERVICE}"
+RUN go build -o /app .
 
 #==============================================================================
 FROM alpine:latest
