@@ -14,7 +14,8 @@
     "template": {
         "job-cd-config-template": {
             "from": "$inputs",
-            "pattern": "{{service}}-cd-config"
+            "pattern": "{{service}}-cd-config",
+            "glob": "**/README.md"
         },
         "service-name": {
             "from": "$inputs",

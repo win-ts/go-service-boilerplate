@@ -14,11 +14,4 @@ spec:
               name: service-name
           - secretRef:
               name: service-name
-        resources:
-          limits:
-            cpu: 200m
-            memory: 64Mi
-          requests:
-            cpu: 100m
-            memory: 8Mi
     restartPolicy: Never

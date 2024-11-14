@@ -30,23 +30,16 @@ spec:
           ports:
             - containerPort: 8080
               protocol: TCP
-          resources:
-            limits:
-              cpu: 200m
-              memory: 512Mi
-            requests:
-              cpu: 100m
-              memory: 256Mi
           readinessProbe:
             httpGet:
-              path: /health/liveness
+              path: /health
               port: 8080
               scheme: HTTP
             timeoutSeconds: 10
             initialDelaySeconds: 10
           livenessProbe:
             httpGet:
-              path: /health/readiness
+              path: /health
               port: 8080
               scheme: HTTP
             timeoutSeconds: 10
