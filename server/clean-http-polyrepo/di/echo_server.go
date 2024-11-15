@@ -7,6 +7,7 @@ import (
 	"syscall"
 	"time"
 
+	sentryecho "github.com/getsentry/sentry-go/echo"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
@@ -30,10 +31,26 @@ func setupServer(ctx context.Context, e *echo.Echo, c Config) {
 	// Body Limit
 	e.Use(middleware.BodyLimit("10M"))
 
+	// Recover
+	e.Use(middleware.Recover())
+
+	// Logger
+	e.Use(middleware.Logger())
+
+	// Sentry
+	e.Use(sentryecho.New(sentryecho.Options{}))
+	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(ctx echo.Context) error {
+			if hub := sentryecho.GetHubFromContext(ctx); hub != nil {
+				hub.Scope().SetTag("service-name", c.AppConfig.Name)
+			}
+			return next(ctx)
+		}
+	})
+
 	// Graceful Shutdown
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	e.Use(middleware.Logger())
 	go gracefulShutdown(ctx, e, c, quit)
 }
 

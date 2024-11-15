@@ -16,6 +16,7 @@ func TestConfigLoading(t *testing.T) {
 	t.Setenv("APP_ENV_STAGE", "DEV")
 
 	// secret
+	t.Setenv("SENTRY_DSN", "http://sentry.io")
 
 	conf := New()
 
