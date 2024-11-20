@@ -1,0 +1,25 @@
+{
+    "name": "Common Secret Repository for K8s Domain",
+    "description": "Common secrets repository of a K8s domain, for ArgoCD",
+    "group": "Config",
+    "recommended": false,
+    "input": {
+        "domain": {
+            "from": "$prompt",
+            "question": "Please provide the domain name",
+            "example": "subscription",
+            "required": true
+        }
+    },
+    "template": {
+        "domain-name-common-cd-config-template": {
+            "from": "$inputs",
+            "pattern": "{{domain}}-common-cd-config-template",
+            "glob": "**/README.md"
+        },
+        "domain-name": {
+            "from": "$inputs",
+            "pattern": "{{domain}}"
+        }
+    }
+}

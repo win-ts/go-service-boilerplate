@@ -27,8 +27,9 @@ func New(c Config) {
 	ctx := context.Background()
 
 	if err := sentry.Init(sentry.ClientOptions{
-		Dsn:   c.SentryConfig.SentryDSN,
-		Debug: true,
+		Dsn:              c.SentryConfig.SentryDSN,
+		Debug:            true,
+		TracesSampleRate: 1.0,
 	}); err != nil {
 		log.Errorf("error - [main.initServer] sentry initialization failed: %v", err)
 	}
