@@ -9,4 +9,4 @@ secretGenerator:
       - secret.env
 
 generatorOptions:
-  disableNameSuffixHash: 
+  disableNameSuffixHash: true
