@@ -1,6 +1,6 @@
 prepare:
 	@echo "Preparing required libraries..."
-	brew install pre-commit
+	@command -v pre-commit >/dev/null 2>&1 || brew install pre-commit
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.59.1
 	go install golang.org/x/tools/cmd/goimports@latest
 
@@ -20,6 +20,7 @@ run:
 
 dev.up:
 	@echo "Starting local development..."
+	$(MAKE) local.env.prepare
 	docker compose -f docker-compose.dev.yaml up
 
 dev.down:
@@ -33,8 +34,28 @@ dev.build.push.local:
 	docker tag $(SERVICE) localhost:5001/$(SERVICE)
 	docker push localhost:5001/$(SERVICE)
 
+dev.up.alpha:
+	@echo "Starting alpha development..."
+	$(MAKE) alpha.env.prepare
+	docker compose -f docker-compose.dev.yaml up
+
+env.prepare:
+	@command -v jq >/dev/null 2>&1 || brew install jq
+
+local.env.prepare:
+	@echo "Preparing .env.generated for local envs..."
+	cat .env.local > .env.generated
+	cat .env.local.common >> .env.generated
+
+alpha.env.prepare:
+	$(MAKE) env.prepare
+
+	@echo "Preparing .env.generated for alpha envs..."
+	sh ./scripts/get-k8s-alpha-env.sh > .env.generated
+	cat .env.local >> .env.generated
+
 swagger:
 	@echo "Generating swagger docs..."
 	swag init
 
-.PHONY: prepare rehooks run dev.up dev.down dev.build.push.local swagger
+.PHONY: prepare rehooks run dev.up dev.down dev.build.push.local dev.up.alpha env.prepare local.env.prepare alpha.env.prepare swagger

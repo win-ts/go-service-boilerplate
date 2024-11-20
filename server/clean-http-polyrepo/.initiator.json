@@ -11,6 +11,12 @@
             "required": false,
             "default": "project-inari"
         },
+        "domain": {
+            "from": "$prompt",
+            "question": "Please provide the domain name",
+            "example": "subscription",
+            "required": true
+        },
         "service": {
             "from": "$prompt",
             "question": "Please provide the service name",
@@ -37,6 +43,10 @@
         "service-name": {
             "from": "$inputs",
             "pattern": "{{service}}"
+        },
+        "domain-common-secret": {
+            "from": "$inputs",
+            "pattern": "{{domain}}-common-secret"
         }
     }
 }

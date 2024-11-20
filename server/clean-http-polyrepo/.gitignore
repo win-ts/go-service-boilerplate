@@ -31,3 +31,6 @@ go.work.sum
 
 # Windows
 Thumbs.db
+
+# envs
+.env.generated

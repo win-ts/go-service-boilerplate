@@ -18,8 +18,8 @@ func New() *Config {
 	once.Do(func() {
 		e := os.Getenv("APP_ENV_STAGE")
 		if e == "" {
-			if err := godotenv.Load(".env.local"); err != nil {
-				log.Warnf("Warning - [config.New] unable to load .env.local file: %v", err)
+			if err := godotenv.Load(".env.generated"); err != nil {
+				log.Warnf("Warning - [config.New] unable to load .env.generated file: %v", err)
 			}
 		}
 
