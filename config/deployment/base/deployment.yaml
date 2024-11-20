@@ -27,6 +27,8 @@ spec:
                 name: service-name
             - secretRef:
                 name: service-name
+            - secretRef:
+                name: domain-common-secret
           ports:
             - containerPort: 8080
               protocol: TCP

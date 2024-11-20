@@ -4,6 +4,12 @@
     "group": "Config",
     "recommended": false,
     "input": {
+        "domain": {
+            "from": "$prompt",
+            "question": "Please provide the domain name",
+            "example": "subscription",
+            "required": true
+        },
         "service": {
             "from": "$prompt",
             "question": "Please provide the cronjob name",
@@ -20,6 +26,10 @@
         "service-name": {
             "from": "$inputs",
             "pattern": "{{service}}"
+        },
+        "domain-common-secret": {
+            "from": "$inputs",
+            "pattern": "{{domain}}-common-secret"
         }
     }
 }

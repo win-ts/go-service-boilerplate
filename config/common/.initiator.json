@@ -14,7 +14,7 @@
     "template": {
         "domain-name-common-cd-config-template": {
             "from": "$inputs",
-            "pattern": "{{domain}}-common-cd-config-template",
+            "pattern": "{{domain}}-common-cd-config",
             "glob": "**/README.md"
         },
         "domain-name": {

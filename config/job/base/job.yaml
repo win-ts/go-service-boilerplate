@@ -14,4 +14,6 @@ spec:
               name: service-name
           - secretRef:
               name: service-name
+          - secretRef:
+              name: domain-common-secret
     restartPolicy: Never
