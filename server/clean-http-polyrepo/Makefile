@@ -39,7 +39,7 @@ dev.build.push.local:
 dev.up.alpha:
 	@echo "Starting alpha development..."
 	$(MAKE) alpha.env.prepare
-	docker compose -f docker-compose.dev.yaml up
+	docker compose -f docker-compose.dev.yaml up --scale mysql=0
 
 local.env.prepare:
 	@echo "Preparing .env.generated for local envs..."

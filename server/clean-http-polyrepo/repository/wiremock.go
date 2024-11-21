@@ -9,7 +9,6 @@ import (
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/pkg/httpclient"
 )
 
-// wiremockAPIRepository is the concrete implementation of WiremockAPIRepository
 type wiremockAPIRepository struct {
 	baseURL string
 	path    string

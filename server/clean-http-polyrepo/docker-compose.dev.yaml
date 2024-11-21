@@ -12,6 +12,23 @@ services:
       - 8080:8080
     working_dir: /src/go/server/clean-http-polyrepo
     command: air -c .air.toml
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:8.4.2
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: test
+      MYSQL_ROOT_HOST: "%"
+      TZ: Asia/Bangkok
+    ports:
+      - 3306:3306
+    volumes:
+      - ./.docker-volumes/mysql:/var/lib/mysql
     networks:
       - app-network
 

@@ -11,6 +11,7 @@ import (
 
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/config"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/handler"
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/pkg/database"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/pkg/httpclient"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/repository"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/service"
@@ -33,6 +34,26 @@ func New(c *config.Config) {
 	e := echo.New()
 	setupServer(ctx, e, c)
 
+	// MySQL initialization
+	mysqlDB, err := database.NewMySQL(database.MySQLOptions{
+		Host:         c.MySQLConfig.Host,
+		Username:     c.MySQLConfig.Username,
+		Password:     c.MySQLConfig.Password,
+		Database:     c.MySQLConfig.Database,
+		Timeout:      c.MySQLConfig.Timeout,
+		MaxIdleConns: c.MySQLConfig.MaxIdleConns,
+		MaxOpenConns: c.MySQLConfig.MaxOpenConns,
+		MaxLifetime:  c.MySQLConfig.MaxLifetime,
+	})
+	if err != nil {
+		log.Panicf("error - [main.New] unable to connect to MySQL: %v", err)
+	}
+	defer func() {
+		if err := mysqlDB.Client.Close(); err != nil {
+			log.Errorf("error - [main.New] unable to close MySQL connection: %v", err)
+		}
+	}()
+
 	// Repository initialization
 	exampleRepo := repository.NewExampleRepository(repository.ExampleRepositoryConfig{})
 
@@ -50,10 +71,17 @@ func New(c *config.Config) {
 		Client: httpClientWiremock,
 	})
 
+	databaseRepo := repository.NewDatabaseRepository(repository.DatabaseRepositoryConfig{
+		Database: c.MySQLConfig.Database,
+	}, repository.DatabaseRepositoryDependencies{
+		Client: mysqlDB.Client,
+	})
+
 	// Service initialization
 	service := service.New(service.Dependencies{
 		ExampleRepository:     exampleRepo,
 		WiremockAPIRepository: wiremockAPIRepo,
+		DatabaseRepository:    databaseRepo,
 	})
 
 	// Handler initialization

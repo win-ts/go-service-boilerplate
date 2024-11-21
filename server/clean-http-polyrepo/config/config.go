@@ -39,6 +39,7 @@ type Config struct {
 	AppConfig         AppConfig
 	SentryConfig      SentryConfig
 	WiremockAPIConfig WiremockAPIConfig
+	MySQLConfig       MySQLConfig
 }
 
 // AppConfig represents the configuration of the application
@@ -53,7 +54,7 @@ type SentryConfig struct {
 	SentryDSN string `env:"SENTRY_DSN"`
 }
 
-// WiremockAPIConfig represents the configuration of the Wiremock API client
+// WiremockAPIConfig represents the configuration of the Wiremock API
 type WiremockAPIConfig struct {
 	BaseURL                  string        `env:"WIREMOCK_API_BASE_URL,notEmpty"`
 	Path                     string        `env:"WIREMOCK_API_PATH,notEmpty"`
@@ -62,4 +63,16 @@ type WiremockAPIConfig struct {
 	Timeout                  time.Duration `env:"WIREMOCK_API_TIMEOUT,notEmpty"`
 	InsecureSkipVerify       bool          `env:"WIREMOCK_API_INSECURE_SKIP_VERIFY,notEmpty"`
 	MaxTransactionsPerSecond int           `env:"WIREMOCK_API_MAX_TRANSACTIONS_PER_SECOND"`
+}
+
+// MySQLConfig represents the configuration of the MySQL database
+type MySQLConfig struct {
+	Host         string        `env:"MYSQL_HOST,notEmpty"`
+	Username     string        `env:"MYSQL_USERNAME,notEmpty"`
+	Password     string        `env:"MYSQL_PASSWORD,notEmpty"`
+	Database     string        `env:"MYSQL_DATABASE,notEmpty"`
+	Timeout      time.Duration `env:"MYSQL_TIMEOUT,notEmpty"`
+	MaxIdleConns int           `env:"MYSQL_MAX_IDLE_CONNS,notEmpty"`
+	MaxOpenConns int           `env:"MYSQL_MAX_OPEN_CONNS,notEmpty"`
+	MaxLifetime  time.Duration `env:"MYSQL_MAX_LIFETIME,notEmpty"`
 }

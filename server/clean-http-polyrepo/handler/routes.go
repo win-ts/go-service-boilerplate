@@ -12,4 +12,5 @@ func (h *httpHandler) initRoutes(e *echo.Echo) {
 	v1 := e.Group("/v1")
 	v1.GET("/example", h.DoExample)
 	v1.GET("/test", h.DoWiremock)
+	v1.GET("/db", h.DoDBTest)
 }

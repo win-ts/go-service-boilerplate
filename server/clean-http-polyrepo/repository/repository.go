@@ -17,3 +17,8 @@ type ExampleRepository interface {
 type WiremockAPIRepository interface {
 	GetTest(ctx context.Context, h dto.WiremockGetTestHeader) (*httpclient.Response[dto.WiremockGetTestResponse], error)
 }
+
+// DatabaseRepository represents the repository layer functions of database repository
+type DatabaseRepository interface {
+	QueryTest() (*[]dto.TestEntity, error)
+}
