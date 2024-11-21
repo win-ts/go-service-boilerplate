@@ -10,7 +10,7 @@ services:
       - ./:/src/go
     ports:
       - 8080:8080
-    working_dir: /src/go/server/clean-http-polyrepo
+    working_dir: /src/go
     command: air -c .air.toml
     depends_on:
       - mysql
