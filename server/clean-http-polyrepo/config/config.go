@@ -53,6 +53,7 @@ type SentryConfig struct {
 	SentryDSN string `env:"SENTRY_DSN"`
 }
 
+// WiremockAPIConfig represents the configuration of the Wiremock API client
 type WiremockAPIConfig struct {
 	BaseURL                  string        `env:"WIREMOCK_API_BASE_URL,notEmpty"`
 	Path                     string        `env:"WIREMOCK_API_PATH,notEmpty"`

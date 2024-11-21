@@ -11,29 +11,29 @@ import (
 
 // wiremockAPIRepository is the concrete implementation of WiremockAPIRepository
 type wiremockAPIRepository struct {
-    baseURL string
-    path    string
-    client  *http.Client
+	baseURL string
+	path    string
+	client  *http.Client
 }
 
 // WiremockAPIRepositoryConfig represents the configuration for wiremock API repository
 type WiremockAPIRepositoryConfig struct {
-    BaseURL string
-    Path    string
+	BaseURL string
+	Path    string
 }
 
 // WiremockAPIRepositoryDependencies represents the dependencies for wiremock API repository
 type WiremockAPIRepositoryDependencies struct {
-    Client *http.Client
+	Client *http.Client
 }
 
 // NewWiremockAPIRepository creates a new wiremock API repository
 func NewWiremockAPIRepository(c WiremockAPIRepositoryConfig, d WiremockAPIRepositoryDependencies) WiremockAPIRepository {
-    return &wiremockAPIRepository{
-        baseURL: c.BaseURL,
-        path:    c.Path,
-        client:  d.Client,
-    }
+	return &wiremockAPIRepository{
+		baseURL: c.BaseURL,
+		path:    c.Path,
+		client:  d.Client,
+	}
 }
 
 // GetTest returns the test response from wiremock API

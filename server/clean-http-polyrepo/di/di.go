@@ -36,7 +36,7 @@ func New(c *config.Config) {
 	// Repository initialization
 	exampleRepo := repository.NewExampleRepository(repository.ExampleRepositoryConfig{})
 
-	httpClientWiremock := httpclient.NewHTTPClient(&httpclient.HTTPClientOptions{
+	httpClientWiremock := httpclient.NewHTTPClient(&httpclient.Options{
 		MaxConns:                 c.WiremockAPIConfig.MaxConns,
 		MaxRetry:                 c.WiremockAPIConfig.MaxRetry,
 		Timeout:                  c.WiremockAPIConfig.Timeout,
