@@ -7,7 +7,6 @@ import (
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/config"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/di"
 	_ "github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/docs"
-	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/repository"
 )
 
 // @title API Endpoints for service-name
@@ -24,8 +23,5 @@ func main() {
 	cfg := config.New()
 
 	// Initialize dependency injection
-	di.New(di.Config{
-		AppConfig:               cfg.AppConfig,
-		ExampleRepositoryConfig: repository.ExampleRepositoryConfig{},
-	})
+	di.New(cfg)
 }

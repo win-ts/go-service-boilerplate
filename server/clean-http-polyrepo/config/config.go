@@ -4,6 +4,7 @@ package config
 import (
 	"os"
 	"sync"
+	"time"
 
 	"github.com/caarlos0/env/v11"
 	"github.com/joho/godotenv"
@@ -35,8 +36,9 @@ func New() *Config {
 
 // Config represents the configuration of the server
 type Config struct {
-	AppConfig    AppConfig
-	SentryConfig SentryConfig
+	AppConfig         AppConfig
+	SentryConfig      SentryConfig
+	WiremockAPIConfig WiremockAPIConfig
 }
 
 // AppConfig represents the configuration of the application
@@ -49,4 +51,14 @@ type AppConfig struct {
 // SentryConfig represents the configuration of Sentry.io
 type SentryConfig struct {
 	SentryDSN string `env:"SENTRY_DSN"`
+}
+
+type WiremockAPIConfig struct {
+	BaseURL                  string        `env:"WIREMOCK_API_BASE_URL,notEmpty"`
+	Path                     string        `env:"WIREMOCK_API_PATH,notEmpty"`
+	MaxConns                 int           `env:"WIREMOCK_API_MAX_CONNS,notEmpty"`
+	MaxRetry                 int           `env:"WIREMOCK_API_MAX_RETRY,notEmpty"`
+	Timeout                  time.Duration `env:"WIREMOCK_API_TIMEOUT,notEmpty"`
+	InsecureSkipVerify       bool          `env:"WIREMOCK_API_INSECURE_SKIP_VERIFY,notEmpty"`
+	MaxTransactionsPerSecond int           `env:"WIREMOCK_API_MAX_TRANSACTIONS_PER_SECOND"`
 }

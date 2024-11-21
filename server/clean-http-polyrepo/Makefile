@@ -1,6 +1,8 @@
 prepare:
 	@echo "Preparing required libraries..."
 	@command -v pre-commit >/dev/null 2>&1 || brew install pre-commit
+	@command -v jq >/dev/null 2>&1 || brew install jq
+	@command -v wiremock-standalone >/dev/null 2>&1 || brew install wiremock-standalone
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.59.1
 	go install golang.org/x/tools/cmd/goimports@latest
 
@@ -39,23 +41,21 @@ dev.up.alpha:
 	$(MAKE) alpha.env.prepare
 	docker compose -f docker-compose.dev.yaml up
 
-env.prepare:
-	@command -v jq >/dev/null 2>&1 || brew install jq
-
 local.env.prepare:
 	@echo "Preparing .env.generated for local envs..."
 	cat .env.local > .env.generated
 	cat .env.local.common >> .env.generated
 
 alpha.env.prepare:
-	$(MAKE) env.prepare
-
 	@echo "Preparing .env.generated for alpha envs..."
 	sh ./scripts/get-k8s-alpha-env.sh > .env.generated
 	cat .env.local >> .env.generated
+
+wiremock:
+	wiremock --port 1324 --verbose --local-response-templating --root-dir tools/wiremock
 
 swagger:
 	@echo "Generating swagger docs..."
 	swag init
 
-.PHONY: prepare rehooks run dev.up dev.down dev.build.push.local dev.up.alpha env.prepare local.env.prepare alpha.env.prepare swagger
+.PHONY: prepare rehooks run dev.up dev.down dev.build.push.local dev.up.alpha local.env.prepare alpha.env.prepare wiremock swagger

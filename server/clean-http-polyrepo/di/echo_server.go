@@ -11,9 +11,11 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
+	
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/config"
 )
 
-func setupServer(ctx context.Context, e *echo.Echo, c Config) {
+func setupServer(ctx context.Context, e *echo.Echo, c *config.Config) {
 	// Request Timeout
 	e.Use(middleware.TimeoutWithConfig(middleware.TimeoutConfig{
 		Skipper:      middleware.DefaultSkipper,
@@ -42,7 +44,7 @@ func setupServer(ctx context.Context, e *echo.Echo, c Config) {
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(ctx echo.Context) error {
 			if hub := sentryecho.GetHubFromContext(ctx); hub != nil {
-				hub.Scope().SetTag("service-name", c.AppConfig.Name)
+				hub.Scope().SetTag("test-argo", c.AppConfig.Name)
 			}
 			return next(ctx)
 		}
@@ -54,7 +56,7 @@ func setupServer(ctx context.Context, e *echo.Echo, c Config) {
 	go gracefulShutdown(ctx, e, c, quit)
 }
 
-func gracefulShutdown(ctx context.Context, e *echo.Echo, c Config, quit <-chan os.Signal) {
+func gracefulShutdown(ctx context.Context, e *echo.Echo, c *config.Config, quit <-chan os.Signal) {
 	log.Infof("Starting server: %s", c.AppConfig.Name)
 	<-quit
 	log.Info("Shutting down server ...")
