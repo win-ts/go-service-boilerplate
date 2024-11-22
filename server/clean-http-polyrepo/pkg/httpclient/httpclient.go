@@ -99,12 +99,17 @@ func Do[REQ, RES any](ctx context.Context, client *http.Client, method, url stri
 
 func newRequest(ctx context.Context, method, url string, header map[string]string, payload any) (*http.Request, error) {
 	var buf bytes.Buffer
-	if err := json.NewEncoder(&buf).Encode(&payload); err != nil {
-		return nil, err
-	}
-
 	var req *http.Request
-	req, err := http.NewRequestWithContext(ctx, method, url, &buf)
+	var err error
+
+	if method == http.MethodGet {
+		req, err = http.NewRequestWithContext(ctx, method, url, nil)
+	} else {
+		if err := json.NewEncoder(&buf).Encode(&payload); err != nil {
+			return nil, err
+		}
+		req, err = http.NewRequestWithContext(ctx, method, url, &buf)
+	}
 	if err != nil {
 		return nil, err
 	}
