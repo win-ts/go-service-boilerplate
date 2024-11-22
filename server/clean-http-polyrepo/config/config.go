@@ -2,25 +2,24 @@
 package config
 
 import (
-	"os"
+	"log"
+	"log/slog"
 	"sync"
 	"time"
 
 	"github.com/caarlos0/env/v11"
 	"github.com/joho/godotenv"
-	"github.com/labstack/gommon/log"
 )
 
 var once sync.Once
 var config *Config
 
 // New loads the configuration from the .env file
-func New() *Config {
+func New(e string) *Config {
 	once.Do(func() {
-		e := os.Getenv("APP_ENV_STAGE")
-		if e == "" {
+		if e == "" || e == "DEV" {
 			if err := godotenv.Load(".env.generated"); err != nil {
-				log.Warnf("Warning - [config.New] unable to load .env.generated file: %v", err)
+				slog.Warn("[config.New] unable to load .env.generated file", slog.Any("error", err))
 			}
 		}
 

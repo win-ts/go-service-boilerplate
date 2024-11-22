@@ -3,11 +3,12 @@ package di
 
 import (
 	"context"
+	"log"
+	"log/slog"
 	"net/http"
 
 	"github.com/getsentry/sentry-go"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
 
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/config"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/handler"
@@ -27,7 +28,7 @@ func New(c *config.Config) {
 		Debug:            true,
 		TracesSampleRate: 1.0,
 	}); err != nil {
-		log.Errorf("error - [main.initServer] sentry initialization failed: %v", err)
+		slog.Error("error - [main.initServer] sentry initialization failed", slog.Any("error", err))
 	}
 
 	// Echo server initialization
@@ -50,7 +51,7 @@ func New(c *config.Config) {
 	}
 	defer func() {
 		if err := mysqlDB.Client.Close(); err != nil {
-			log.Errorf("error - [main.New] unable to close MySQL connection: %v", err)
+			slog.Error("error - [main.New] unable to close MySQL connection", slog.Any("error", err))
 		}
 	}()
 

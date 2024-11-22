@@ -3,10 +3,9 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"strconv"
 	"time"
-
-	"github.com/labstack/gommon/log"
 )
 
 // Debug prints the object in a pretty format
@@ -26,7 +25,7 @@ func ConvertStringTimetoTime(t string) time.Time {
 	layout := "2006-01-02T15:04:05.999 -0700 MST"
 	result, err := time.Parse(layout, t)
 	if err != nil {
-		log.Errorf("error - [utils.convertStringTimetoTime] parse time failed: %s", err.Error())
+		slog.Error("[utils.convertStringTimetoTime] parse time failed", slog.Any("error", err))
 	}
 
 	loc, _ := time.LoadLocation("Asia/Bangkok")

@@ -5,11 +5,11 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log/slog"
 	"time"
 
 	// MySQL driver
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/labstack/gommon/log"
 )
 
 // MySQL represents the MySQL database client
@@ -42,7 +42,9 @@ func NewMySQL(opts MySQLOptions) (*MySQL, error) {
 		opts.Timeout,
 	)
 
-	log.Infof("[di.NewMySQL] connecting to MySQL database: %s", opts.Database)
+	slog.Info("[di.NewMySQL] connecting to MySQL database",
+		slog.String("database", opts.Database),
+	)
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		return nil, err

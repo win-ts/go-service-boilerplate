@@ -2,6 +2,8 @@ package di
 
 import (
 	"context"
+	"log"
+	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
@@ -10,7 +12,7 @@ import (
 	sentryecho "github.com/getsentry/sentry-go/echo"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/labstack/gommon/log"
+	slogecho "github.com/samber/slog-echo"
 
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/config"
 )
@@ -37,7 +39,7 @@ func setupServer(ctx context.Context, e *echo.Echo, c *config.Config) {
 	e.Use(middleware.Recover())
 
 	// Logger
-	e.Use(middleware.Logger())
+	e.Use(slogecho.New(slog.Default()))
 
 	// Sentry
 	e.Use(sentryecho.New(sentryecho.Options{}))
@@ -57,9 +59,11 @@ func setupServer(ctx context.Context, e *echo.Echo, c *config.Config) {
 }
 
 func gracefulShutdown(ctx context.Context, e *echo.Echo, c *config.Config, quit <-chan os.Signal) {
-	log.Infof("Starting server: %s", c.AppConfig.Name)
+	slog.Info("Starting server...",
+		slog.String("name", c.AppConfig.Name),
+	)
 	<-quit
-	log.Info("Shutting down server ...")
+	slog.Info("Shutting down server...")
 
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()

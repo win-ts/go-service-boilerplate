@@ -2,9 +2,10 @@
 package request
 
 import (
+	"log/slog"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
 )
 
 type (
@@ -29,12 +30,12 @@ func ContextWrapper(ctx echo.Context) contextWrapperService {
 // Bind binds the data to the request context
 func (c *contextWrapper) Bind(data any) error {
 	if err := c.Context.Bind(data); err != nil {
-		log.Errorf("error - [request.Bind] bind data failed: %s", err.Error())
+		slog.Error("error - [request.Bind] bind data failed", slog.Any("error", err))
 		return err
 	}
 
 	if err := c.validator.Struct(data); err != nil {
-		log.Errorf("error - [request.Bind] validate data failed: %s", err.Error())
+		slog.Error("error - [request.Bind] validate data failed", slog.Any("error", err))
 		return err
 	}
 
