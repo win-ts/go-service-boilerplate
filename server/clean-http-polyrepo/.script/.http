@@ -6,3 +6,6 @@ Content-Type: application/json
 
 GET http://localhost:8080/v1/db
 Content-Type: application/json
+
+GET http://localhost:8080/v1/kafka
+Content-Type: application/json

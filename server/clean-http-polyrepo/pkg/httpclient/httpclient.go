@@ -23,7 +23,7 @@ type Options struct {
 }
 
 // NewHTTPClient creates a new HTTP client with the given options
-func NewHTTPClient(opts *Options) *http.Client {
+func NewHTTPClient(opts Options) *http.Client {
 	httpClient := retryablehttp.NewClient()
 
 	httpClient.RetryMax = opts.MaxRetry

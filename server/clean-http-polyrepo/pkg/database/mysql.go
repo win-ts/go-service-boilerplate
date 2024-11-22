@@ -66,11 +66,7 @@ func NewMySQL(opts MySQLOptions) (*MySQL, error) {
 
 // Close closes the MySQL database connection
 func (db *MySQL) Close() error {
-	if err := db.Client.Close(); err != nil {
-		return err
-	}
-
-	return nil
+	return db.Client.Close()
 }
 
 // Ping pings the MySQL database

@@ -14,6 +14,7 @@ import (
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/handler"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/pkg/database"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/pkg/httpclient"
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/pkg/kafka"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/repository"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/service"
 )
@@ -35,6 +36,15 @@ func New(c *config.Config) {
 	e := echo.New()
 	setupServer(ctx, e, c)
 
+	// HTTP Client initialization
+	httpClientWiremock := httpclient.NewHTTPClient(httpclient.Options{
+		MaxConns:                 c.WiremockAPIConfig.MaxConns,
+		MaxRetry:                 c.WiremockAPIConfig.MaxRetry,
+		Timeout:                  c.WiremockAPIConfig.Timeout,
+		InsecureSkipVerify:       c.WiremockAPIConfig.InsecureSkipVerify,
+		MaxTransactionsPerSecond: c.WiremockAPIConfig.MaxTransactionsPerSecond,
+	})
+
 	// MySQL initialization
 	mysqlDB, err := database.NewMySQL(database.MySQLOptions{
 		Host:         c.MySQLConfig.Host,
@@ -55,16 +65,26 @@ func New(c *config.Config) {
 		}
 	}()
 
+	// Kafka Producer initialization
+	kafkaProducer, err := kafka.NewProducer(kafka.ProducerOptions{
+		Username: c.KafkaProducerConfig.Username,
+		Password: c.KafkaProducerConfig.Password,
+		Brokers:  c.KafkaProducerConfig.Brokers,
+		Timeout:  c.KafkaProducerConfig.Timeout,
+		MaxRetry: c.KafkaProducerConfig.MaxRetry,
+	})
+	if err != nil {
+		log.Panicf("error - [main.New] unable to create Kafka producer: %v", err)
+	}
+	defer func() {
+		if err := kafkaProducer.Close(); err != nil {
+			slog.Error("error - [main.New] unable to close Kafka producer", slog.Any("error", err))
+		}
+	}()
+
 	// Repository initialization
 	exampleRepo := repository.NewExampleRepository(repository.ExampleRepositoryConfig{})
 
-	httpClientWiremock := httpclient.NewHTTPClient(&httpclient.Options{
-		MaxConns:                 c.WiremockAPIConfig.MaxConns,
-		MaxRetry:                 c.WiremockAPIConfig.MaxRetry,
-		Timeout:                  c.WiremockAPIConfig.Timeout,
-		InsecureSkipVerify:       c.WiremockAPIConfig.InsecureSkipVerify,
-		MaxTransactionsPerSecond: c.WiremockAPIConfig.MaxTransactionsPerSecond,
-	})
 	wiremockAPIRepo := repository.NewWiremockAPIRepository(repository.WiremockAPIRepositoryConfig{
 		BaseURL: c.WiremockAPIConfig.BaseURL,
 		Path:    c.WiremockAPIConfig.Path,
@@ -78,11 +98,18 @@ func New(c *config.Config) {
 		Client: mysqlDB.Client,
 	})
 
+	kafkaProducerRepo := repository.NewKafkaProducerRepository(repository.KafkaProducerRepositoryConfig{
+		TopicName: c.KafkaProducerConfig.Topic,
+	}, repository.KafkaProducerRepositoryDependencies{
+		Producer: kafkaProducer.Producer,
+	})
+
 	// Service initialization
 	service := service.New(service.Dependencies{
-		ExampleRepository:     exampleRepo,
-		WiremockAPIRepository: wiremockAPIRepo,
-		DatabaseRepository:    databaseRepo,
+		ExampleRepository:       exampleRepo,
+		WiremockAPIRepository:   wiremockAPIRepo,
+		DatabaseRepository:      databaseRepo,
+		KafkaProducerRepository: kafkaProducerRepo,
 	})
 
 	// Handler initialization

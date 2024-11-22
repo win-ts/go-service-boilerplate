@@ -35,10 +35,11 @@ func New(e string) *Config {
 
 // Config represents the configuration of the server
 type Config struct {
-	AppConfig         AppConfig
-	SentryConfig      SentryConfig
-	WiremockAPIConfig WiremockAPIConfig
-	MySQLConfig       MySQLConfig
+	AppConfig           AppConfig
+	SentryConfig        SentryConfig
+	WiremockAPIConfig   WiremockAPIConfig
+	MySQLConfig         MySQLConfig
+	KafkaProducerConfig KafkaProducerConfig
 }
 
 // AppConfig represents the configuration of the application
@@ -74,4 +75,14 @@ type MySQLConfig struct {
 	MaxIdleConns int           `env:"MYSQL_MAX_IDLE_CONNS,notEmpty"`
 	MaxOpenConns int           `env:"MYSQL_MAX_OPEN_CONNS,notEmpty"`
 	MaxLifetime  time.Duration `env:"MYSQL_MAX_LIFETIME,notEmpty"`
+}
+
+// KafkaProducerConfig represents the configuration of the Kafka producer
+type KafkaProducerConfig struct {
+	Username string        `env:"KAFKA_USERNAME,notEmpty"`
+	Password string        `env:"KAFKA_PASSWORD,notEmpty"`
+	Timeout  time.Duration `env:"KAFKA_TIMEOUT,notEmpty"`
+	MaxRetry int           `env:"KAFKA_MAX_RETRY,notEmpty"`
+	Brokers  []string      `env:"KAFKA_BROKERS,notEmpty"`
+	Topic    string        `env:"KAFKA_TOPIC,notEmpty"`
 }

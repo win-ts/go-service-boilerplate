@@ -22,3 +22,8 @@ type WiremockAPIRepository interface {
 type DatabaseRepository interface {
 	QueryTest() (*[]dto.TestEntity, error)
 }
+
+// KafkaProducerRepository represents the repository layer functions of kafka producer repository
+type KafkaProducerRepository interface {
+	Produce(message dto.Event) error
+}
