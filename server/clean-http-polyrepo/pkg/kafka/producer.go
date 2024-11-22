@@ -2,6 +2,8 @@
 package kafka
 
 import (
+	"log/slog"
+	"strings"
 	"time"
 
 	"github.com/IBM/sarama"
@@ -52,6 +54,10 @@ func NewProducer(opts ProducerOptions) (*Producer, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	slog.Info("[kafka.NewProducer] Kafka producer connected",
+		slog.String("brokers", strings.Join(opts.Brokers, ",")),
+	)
 
 	return &Producer{
 		Producer: p,

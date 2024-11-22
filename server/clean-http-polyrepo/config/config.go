@@ -39,6 +39,7 @@ type Config struct {
 	SentryConfig        SentryConfig
 	WiremockAPIConfig   WiremockAPIConfig
 	MySQLConfig         MySQLConfig
+	RedisConfig         RedisConfig
 	KafkaProducerConfig KafkaProducerConfig
 }
 
@@ -75,6 +76,15 @@ type MySQLConfig struct {
 	MaxIdleConns int           `env:"MYSQL_MAX_IDLE_CONNS,notEmpty"`
 	MaxOpenConns int           `env:"MYSQL_MAX_OPEN_CONNS,notEmpty"`
 	MaxLifetime  time.Duration `env:"MYSQL_MAX_LIFETIME,notEmpty"`
+}
+
+// RedisConfig represents the configuration of the Redis cache
+type RedisConfig struct {
+	Host     string        `env:"REDIS_HOST,notEmpty"`
+	Password string        `env:"REDIS_PASSWORD,notEmpty"`
+	Timeout  time.Duration `env:"REDIS_TIMEOUT,notEmpty"`
+	MaxRetry int           `env:"REDIS_MAX_RETRY,notEmpty"`
+	PoolSize int           `env:"REDIS_POOL_SIZE,notEmpty"`
 }
 
 // KafkaProducerConfig represents the configuration of the Kafka producer

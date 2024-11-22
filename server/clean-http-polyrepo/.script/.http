@@ -9,3 +9,6 @@ Content-Type: application/json
 
 GET http://localhost:8080/v1/kafka
 Content-Type: application/json
+
+GET http://localhost:8080/v1/cache
+Content-Type: application/json

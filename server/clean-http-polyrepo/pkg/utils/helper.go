@@ -8,6 +8,16 @@ import (
 	"time"
 )
 
+// DecodeJSONfromString decodes a JSON string to an object
+func DecodeJSONfromString[T any](data string) *T {
+	obj := new(T)
+	if err := json.Unmarshal([]byte(data), obj); err != nil {
+		slog.Error("[utils.DecodeJSONfromString] unable to decode JSON", slog.Any("error", err))
+	}
+
+	return obj
+}
+
 // Debug prints the object in a pretty format
 func Debug(obj any) {
 	raw, _ := json.MarshalIndent(obj, "", "\t")

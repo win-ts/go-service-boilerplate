@@ -12,6 +12,7 @@ import (
 
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/config"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/handler"
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/pkg/cache"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/pkg/database"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/pkg/httpclient"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/pkg/kafka"
@@ -65,6 +66,23 @@ func New(c *config.Config) {
 		}
 	}()
 
+	// Redis initialization
+	redisClient, err := cache.NewRedis(cache.RedisOptions{
+		Host:     c.RedisConfig.Host,
+		Password: c.RedisConfig.Password,
+		Timeout:  c.RedisConfig.Timeout,
+		MaxRetry: c.RedisConfig.MaxRetry,
+		PoolSize: c.RedisConfig.PoolSize,
+	})
+	if err != nil {
+		log.Panicf("error - [main.New] unable to connect to Redis: %v", err)
+	}
+	defer func() {
+		if err := redisClient.Client.Close(); err != nil {
+			slog.Error("error - [main.New] unable to close Redis connection", slog.Any("error", err))
+		}
+	}()
+
 	// Kafka Producer initialization
 	kafkaProducer, err := kafka.NewProducer(kafka.ProducerOptions{
 		Username: c.KafkaProducerConfig.Username,
@@ -98,6 +116,10 @@ func New(c *config.Config) {
 		Client: mysqlDB.Client,
 	})
 
+	cacheRepo := repository.NewCacheRepository(repository.CacheRepositoryConfig{}, repository.CacheRepositoryDependencies{
+		Client: redisClient.Client,
+	})
+
 	kafkaProducerRepo := repository.NewKafkaProducerRepository(repository.KafkaProducerRepositoryConfig{
 		TopicName: c.KafkaProducerConfig.Topic,
 	}, repository.KafkaProducerRepositoryDependencies{
@@ -109,6 +131,7 @@ func New(c *config.Config) {
 		ExampleRepository:       exampleRepo,
 		WiremockAPIRepository:   wiremockAPIRepo,
 		DatabaseRepository:      databaseRepo,
+		CacheRepository:         cacheRepo,
 		KafkaProducerRepository: kafkaProducerRepo,
 	})
 

@@ -42,9 +42,6 @@ func NewMySQL(opts MySQLOptions) (*MySQL, error) {
 		opts.Timeout,
 	)
 
-	slog.Info("[di.NewMySQL] connecting to MySQL database",
-		slog.String("database", opts.Database),
-	)
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		return nil, err
@@ -60,6 +57,10 @@ func NewMySQL(opts MySQLOptions) (*MySQL, error) {
 	if err := db.PingContext(ctx); err != nil {
 		return nil, err
 	}
+
+	slog.Info("[pkg.NewMySQL] connecting to MySQL database",
+		slog.String("database", opts.Database),
+	)
 
 	return &MySQL{db}, nil
 }
