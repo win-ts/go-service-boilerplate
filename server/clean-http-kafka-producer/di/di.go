@@ -12,10 +12,7 @@ import (
 
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-kafka-producer/config"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-kafka-producer/handler"
-	"github.com/win-ts/go-service-boilerplate/server/clean-http-kafka-producer/pkg/cache"
-	"github.com/win-ts/go-service-boilerplate/server/clean-http-kafka-producer/pkg/database"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-kafka-producer/pkg/httpclient"
-	"github.com/win-ts/go-service-boilerplate/server/clean-http-kafka-producer/pkg/kafka"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-kafka-producer/repository"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-kafka-producer/service"
 )
@@ -48,55 +45,55 @@ func New(c *config.Config) {
 	})
 
 	// MySQL initialization
-	mysqlDB, err := database.NewMySQL(database.MySQLOptions{
-		Host:         c.MySQLConfig.Host,
-		Username:     c.MySQLConfig.Username,
-		Password:     c.MySQLConfig.Password,
-		Database:     c.MySQLConfig.Database,
-		Timeout:      c.MySQLConfig.Timeout,
-		MaxIdleConns: c.MySQLConfig.MaxIdleConns,
-		MaxOpenConns: c.MySQLConfig.MaxOpenConns,
-		MaxLifetime:  c.MySQLConfig.MaxLifetime,
+	mysqlDB, err := newMySQL(mySQLOptions{
+		host:         c.MySQLConfig.Host,
+		username:     c.MySQLConfig.Username,
+		password:     c.MySQLConfig.Password,
+		database:     c.MySQLConfig.Database,
+		timeout:      c.MySQLConfig.Timeout,
+		maxIdleConns: c.MySQLConfig.MaxIdleConns,
+		maxOpenConns: c.MySQLConfig.MaxOpenConns,
+		maxLifetime:  c.MySQLConfig.MaxLifetime,
 	})
 	if err != nil {
 		log.Panicf("error - [main.New] unable to connect to MySQL: %v", err)
 	}
 	defer func() {
-		if err := mysqlDB.Client.Close(); err != nil {
+		if err := mysqlDB.client.Close(); err != nil {
 			slog.Error("error - [main.New] unable to close MySQL connection", slog.Any("error", err))
 		}
 	}()
 
 	// Redis initialization
-	redisClient, err := cache.NewRedis(cache.RedisOptions{
-		Host:     c.RedisConfig.Host,
-		Password: c.RedisConfig.Password,
-		Timeout:  c.RedisConfig.Timeout,
-		MaxRetry: c.RedisConfig.MaxRetry,
-		PoolSize: c.RedisConfig.PoolSize,
+	redisClient, err := newRedis(redisOptions{
+		host:     c.RedisConfig.Host,
+		password: c.RedisConfig.Password,
+		timeout:  c.RedisConfig.Timeout,
+		maxRetry: c.RedisConfig.MaxRetry,
+		poolSize: c.RedisConfig.PoolSize,
 	})
 	if err != nil {
 		log.Panicf("error - [main.New] unable to connect to Redis: %v", err)
 	}
 	defer func() {
-		if err := redisClient.Client.Close(); err != nil {
+		if err := redisClient.client.Close(); err != nil {
 			slog.Error("error - [main.New] unable to close Redis connection", slog.Any("error", err))
 		}
 	}()
 
 	// Kafka Producer initialization
-	kafkaProducer, err := kafka.NewProducer(kafka.ProducerOptions{
-		Username: c.KafkaProducerConfig.Username,
-		Password: c.KafkaProducerConfig.Password,
-		Brokers:  c.KafkaProducerConfig.Brokers,
-		Timeout:  c.KafkaProducerConfig.Timeout,
-		MaxRetry: c.KafkaProducerConfig.MaxRetry,
+	kafkaProducer, err := newKafkaProducer(kafkaProducerOptions{
+		username: c.KafkaProducerConfig.Username,
+		password: c.KafkaProducerConfig.Password,
+		brokers:  c.KafkaProducerConfig.Brokers,
+		timeout:  c.KafkaProducerConfig.Timeout,
+		maxRetry: c.KafkaProducerConfig.MaxRetry,
 	})
 	if err != nil {
 		log.Panicf("error - [main.New] unable to create Kafka producer: %v", err)
 	}
 	defer func() {
-		if err := kafkaProducer.Close(); err != nil {
+		if err := kafkaProducer.producer.Close(); err != nil {
 			slog.Error("error - [main.New] unable to close Kafka producer", slog.Any("error", err))
 		}
 	}()
@@ -114,17 +111,17 @@ func New(c *config.Config) {
 	databaseRepo := repository.NewDatabaseRepository(repository.DatabaseRepositoryConfig{
 		Database: c.MySQLConfig.Database,
 	}, repository.DatabaseRepositoryDependencies{
-		Client: mysqlDB.Client,
+		Client: mysqlDB.client,
 	})
 
 	cacheRepo := repository.NewCacheRepository(repository.CacheRepositoryConfig{}, repository.CacheRepositoryDependencies{
-		Client: redisClient.Client,
+		Client: redisClient.client,
 	})
 
 	kafkaProducerRepo := repository.NewKafkaProducerRepository(repository.KafkaProducerRepositoryConfig{
 		TopicName: c.KafkaProducerConfig.Topic,
 	}, repository.KafkaProducerRepositoryDependencies{
-		Producer: kafkaProducer.Producer,
+		Producer: kafkaProducer.producer,
 	})
 
 	// Service initialization
