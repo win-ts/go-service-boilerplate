@@ -1,12 +1,11 @@
-name: ci-uat
+name: ci-release
 
 on:
-  push:
-    branches:
-      - release
+  release:
+    types: [published]
 
 jobs:
-  uat-build:
+  tag-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -39,14 +38,12 @@ jobs:
           gcloud auth configure-docker asia-southeast1-docker.pkg.dev
 
       - name: Build Docker image
-        run: docker build -f ./build/docker/Dockerfile -t service-name .
+        run: docker build -f ./build/docker/Dockerfile -t test-argo .
 
       - name: Tag Docker image
         run: |
-          export VERSION=$(cat VERSION)
-          docker tag service-name asia-southeast1-docker.pkg.dev/inari-poc/inari-poc-registry/service-name:$VERSION
+          docker tag test-argo asia-southeast1-docker.pkg.dev/inari-poc/inari-poc-registry/test-argo:${GITHUB_REF#refs/tags/}
 
       - name: Push Docker image to Artifact Registry
         run: |
-          export VERSION=$(cat VERSION)
-          docker push asia-southeast1-docker.pkg.dev/inari-poc/inari-poc-registry/service-name:$VERSION
+          docker push asia-southeast1-docker.pkg.dev/inari-poc/inari-poc-registry/test-argo:${GITHUB_REF#refs/tags/}
