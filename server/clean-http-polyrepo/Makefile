@@ -2,7 +2,6 @@ prepare:
 	@echo "Preparing required libraries..."
 	@command -v pre-commit >/dev/null 2>&1 || brew install pre-commit
 	@command -v jq >/dev/null 2>&1 || brew install jq
-	@command -v wiremock-standalone >/dev/null 2>&1 || brew install wiremock-standalone
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.59.1
 	go install golang.org/x/tools/cmd/goimports@latest
 
@@ -39,7 +38,7 @@ dev.build.push.local:
 dev.up.alpha:
 	@echo "Starting alpha development..."
 	$(MAKE) alpha.env.prepare
-	docker compose -f docker-compose.dev.yaml up --scale mysql=0 --scale redis=0
+	docker compose -f docker-compose.dev.yaml up --scale mysql=0 --scale redis=0 --scale wiremock=0
 
 local.env.prepare:
 	@echo "Preparing .env.generated for local envs..."
@@ -52,6 +51,7 @@ alpha.env.prepare:
 	cat .env.local >> .env.generated
 
 wiremock:
+	@command -v wiremock-standalone >/dev/null 2>&1 || brew install wiremock-standalone
 	wiremock --port 1324 --verbose --local-response-templating --root-dir tools/wiremock
 
 swagger:

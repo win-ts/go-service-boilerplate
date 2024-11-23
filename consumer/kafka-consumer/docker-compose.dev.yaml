@@ -16,6 +16,7 @@ services:
       - mysql
       - redis
       - kafka
+      - wiremock
     networks:
       - app-network
 
@@ -90,6 +91,17 @@ services:
       - 8100:8080
     depends_on:
       - kafka
+    networks:
+      - app-network
+
+  wiremock:
+    image: wiremock/wiremock:3.9.2
+    container_name: wiremock
+    ports:
+      - 1324:8080
+    volumes:
+      - ./tools/wiremock/__files:/home/wiremock/__files
+      - ./tools/wiremock/mappings:/home/wiremock/mappings
     networks:
       - app-network
 
