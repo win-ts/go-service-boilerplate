@@ -12,7 +12,6 @@ import (
 
 // DoProduce handles the request to do kafka produce function
 // @Summary Run DoProduce function
-// @Description Run DoProduce function
 // @Success 200 string string
 // @Router /v1/kafka [get]
 func (h *httpHandler) DoKafkaProduce(c echo.Context) error {

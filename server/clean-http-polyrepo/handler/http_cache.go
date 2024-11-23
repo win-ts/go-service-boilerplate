@@ -12,7 +12,6 @@ import (
 
 // DoSetGetCache handles the request to do cache set and get function
 // @Summary Run DoSetGetCache function
-// @Description Run DoSetGetCache function
 // @Success 200 string string
 // @Router /v1/cache [get]
 func (h *httpHandler) DoSetGetCache(c echo.Context) error {

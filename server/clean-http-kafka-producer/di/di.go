@@ -28,7 +28,7 @@ func New(c *config.Config) {
 		EnableTracing:    true,
 		TracesSampleRate: 1.0,
 	}); err != nil {
-		slog.Error("error - [main.initServer] sentry initialization failed", slog.Any("error", err))
+		slog.Error("error - [main.New] sentry initialization failed", slog.Any("error", err))
 	}
 
 	// Echo server initialization

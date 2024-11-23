@@ -12,7 +12,6 @@ import (
 
 // DoExample handles the request to do example function
 // @Summary Run DoExample function
-// @Description Run DoExample function
 // @Success 200 string string
 // @Router /v1/example [get]
 func (h *httpHandler) DoExample(c echo.Context) error {

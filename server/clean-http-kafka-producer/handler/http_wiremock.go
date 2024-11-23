@@ -11,7 +11,6 @@ import (
 
 // DoWiremock handles the request to do wiremock function
 // @Summary Run DoWiremock function
-// @Description Run DoWiremock function
 // @Success 200 string string
 // @Router /v1/test [get]
 func (h *httpHandler) DoWiremock(c echo.Context) error {

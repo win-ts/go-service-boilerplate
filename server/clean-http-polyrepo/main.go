@@ -17,7 +17,6 @@ import (
 
 // @title API Endpoints for service-name
 // @version 1.0
-// @description This is the API documentation for service-name
 
 func init() {
 	runtime.GOMAXPROCS(1)
@@ -29,7 +28,6 @@ func init() {
 	time.Local = location
 }
 
-// @BasePath /server
 func main() {
 	// Initialize logger
 	env := os.Getenv("APP_ENV_STAGE")

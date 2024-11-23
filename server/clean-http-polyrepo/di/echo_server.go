@@ -46,7 +46,7 @@ func setupServer(ctx context.Context, e *echo.Echo, c *config.Config) {
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(ctx echo.Context) error {
 			if hub := sentryecho.GetHubFromContext(ctx); hub != nil {
-				hub.Scope().SetTag("test-argo", c.AppConfig.Name)
+				hub.Scope().SetTag("service-name", c.AppConfig.Name)
 			}
 			return next(ctx)
 		}

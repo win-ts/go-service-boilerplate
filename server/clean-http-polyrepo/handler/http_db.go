@@ -8,7 +8,6 @@ import (
 
 // DoDBTest handles the request to do db test query function
 // @Summary Run DoDBTest function
-// @Description Run DoDBTest function
 // @Success 200 string string
 // @Router /v1/db[get]
 func (h *httpHandler) DoDBTest(c echo.Context) error {
