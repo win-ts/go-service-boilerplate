@@ -1,0 +1,34 @@
+run:
+  allow-parallel-runners: true
+
+linters:
+  disable-all: true
+  enable:
+    - dogsled
+    - errcheck
+    - goconst
+    - gocyclo
+    - gofmt
+    - goimports
+    - revive
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - misspell
+    - staticcheck
+    - stylecheck
+    - typecheck
+    - unparam
+    - unused
+
+issues:
+  exclude-use-default: false
+  exclude:
+    - dot-imports
+
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+  goconst:
+    ignore-tests: true

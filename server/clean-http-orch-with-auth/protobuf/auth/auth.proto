@@ -1,0 +1,40 @@
+// Version
+syntax = "proto3";
+
+// Package name
+option go_package = "github.com/win-ts/go-service-boilerplate/server/clean-http-orch-with-auth/protobuf/authPb";
+
+// Structure
+message DeleteUserReq {
+    string uid = 1;
+}
+
+message DeleteUserRes {
+    string uid = 1;
+    bool success = 2;
+}
+
+message GetUidFromEmailReq {
+    string email = 1;
+}
+
+message GetUidFromEmailRes {
+    string email = 1;
+    string uid = 2;
+}
+
+message VerifyTokenReq {
+    string token = 1;
+}
+
+message VerifyTokenRes {
+    string uid = 1;
+    bool success = 2;
+}
+
+// Methods
+service AuthGrpcService {
+    rpc DeleteUser(DeleteUserReq) returns (DeleteUserRes);
+    rpc GetUidFromEmail(GetUidFromEmailReq) returns (GetUidFromEmailRes);
+    rpc VerifyToken(VerifyTokenReq) returns (VerifyTokenRes);
+}
