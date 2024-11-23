@@ -13,6 +13,5 @@ func (h *httpHandler) initRoutes(e *echo.Echo) {
 	v1.GET("/example", h.DoExample)
 	v1.GET("/test", h.DoWiremock)
 	v1.GET("/db", h.DoDBTest)
-	v1.GET("/kafka", h.DoKafkaProduce)
 	v1.GET("/cache", h.DoSetGetCache)
 }

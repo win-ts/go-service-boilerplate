@@ -30,8 +30,3 @@ type CacheRepository interface {
 	Get(ctx context.Context, key string) *redis.StringCmd
 	Set(ctx context.Context, key string, value interface{}, ttl time.Duration) *redis.StatusCmd
 }
-
-// KafkaProducerRepository represents the repository layer functions of kafka producer repository
-type KafkaProducerRepository interface {
-	Produce(message dto.Event) error
-}

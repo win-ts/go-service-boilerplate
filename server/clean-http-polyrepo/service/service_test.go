@@ -69,15 +69,6 @@ func (m *mockCacheRepository) Set(ctx context.Context, key string, value interfa
 	return args.Get(0).(*redis.StatusCmd)
 }
 
-type mockKafkaProducerRepository struct {
-	mock.Mock
-}
-
-func (m *mockKafkaProducerRepository) Produce(message dto.Event) error {
-	args := m.Called(message)
-	return args.Error(0)
-}
-
 func TestDoExample(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		mockExampleRepository := new(mockExampleRepository)
@@ -131,21 +122,6 @@ func TestDoDatabase(t *testing.T) {
 		assert.Equal(t, mockTestDBResults[0].Message, (*result)[0].Message)
 		assert.Equal(t, mockTestDBResults[1].ID, (*result)[1].ID)
 		assert.Equal(t, mockTestDBResults[1].Message, (*result)[1].Message)
-	})
-}
-
-func TestDoKafkaProduce(t *testing.T) {
-	t.Run("success", func(t *testing.T) {
-		mockKafkaProducerRepository := new(mockKafkaProducerRepository)
-		mockKafkaProducerRepository.On("Produce", mock.Anything).Return(nil)
-
-		s := New(Dependencies{
-			KafkaProducerRepository: mockKafkaProducerRepository,
-		})
-
-		err := s.DoKafkaProduce(mockContext)
-
-		assert.NoError(t, err)
 	})
 }
 

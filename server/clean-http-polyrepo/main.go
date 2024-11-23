@@ -34,7 +34,7 @@ func main() {
 	// Initialize logger
 	env := os.Getenv("APP_ENV_STAGE")
 	var logger *slog.Logger
-	if env == "" || env == "DEV" {
+	if env == "" || env == "LOCAL" {
 		logger = slog.New(slogor.NewHandler(os.Stdout, slogor.SetTimeFormat(time.Stamp), slogor.ShowSource()))
 	} else {
 		logger = slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{

@@ -15,7 +15,6 @@ import (
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/pkg/cache"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/pkg/database"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/pkg/httpclient"
-	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/pkg/kafka"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/repository"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/service"
 )
@@ -28,6 +27,7 @@ func New(c *config.Config) {
 	if err := sentry.Init(sentry.ClientOptions{
 		Dsn:              c.SentryConfig.SentryDSN,
 		Debug:            true,
+		EnableTracing:    true,
 		TracesSampleRate: 1.0,
 	}); err != nil {
 		slog.Error("error - [main.initServer] sentry initialization failed", slog.Any("error", err))
@@ -83,23 +83,6 @@ func New(c *config.Config) {
 		}
 	}()
 
-	// Kafka Producer initialization
-	kafkaProducer, err := kafka.NewProducer(kafka.ProducerOptions{
-		Username: c.KafkaProducerConfig.Username,
-		Password: c.KafkaProducerConfig.Password,
-		Brokers:  c.KafkaProducerConfig.Brokers,
-		Timeout:  c.KafkaProducerConfig.Timeout,
-		MaxRetry: c.KafkaProducerConfig.MaxRetry,
-	})
-	if err != nil {
-		log.Panicf("error - [main.New] unable to create Kafka producer: %v", err)
-	}
-	defer func() {
-		if err := kafkaProducer.Close(); err != nil {
-			slog.Error("error - [main.New] unable to close Kafka producer", slog.Any("error", err))
-		}
-	}()
-
 	// Repository initialization
 	exampleRepo := repository.NewExampleRepository(repository.ExampleRepositoryConfig{})
 
@@ -120,19 +103,12 @@ func New(c *config.Config) {
 		Client: redisClient.Client,
 	})
 
-	kafkaProducerRepo := repository.NewKafkaProducerRepository(repository.KafkaProducerRepositoryConfig{
-		TopicName: c.KafkaProducerConfig.Topic,
-	}, repository.KafkaProducerRepositoryDependencies{
-		Producer: kafkaProducer.Producer,
-	})
-
 	// Service initialization
 	service := service.New(service.Dependencies{
-		ExampleRepository:       exampleRepo,
-		WiremockAPIRepository:   wiremockAPIRepo,
-		DatabaseRepository:      databaseRepo,
-		CacheRepository:         cacheRepo,
-		KafkaProducerRepository: kafkaProducerRepo,
+		ExampleRepository:     exampleRepo,
+		WiremockAPIRepository: wiremockAPIRepo,
+		DatabaseRepository:    databaseRepo,
+		CacheRepository:       cacheRepo,
 	})
 
 	// Handler initialization

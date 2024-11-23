@@ -17,7 +17,7 @@ var config *Config
 // New loads the configuration from the .env file
 func New(e string) *Config {
 	once.Do(func() {
-		if e == "" || e == "DEV" {
+		if e == "" || e == "LOCAL" {
 			if err := godotenv.Load(".env.generated"); err != nil {
 				slog.Warn("[config.New] unable to load .env.generated file", slog.Any("error", err))
 			}
@@ -35,12 +35,11 @@ func New(e string) *Config {
 
 // Config represents the configuration of the server
 type Config struct {
-	AppConfig           AppConfig
-	SentryConfig        SentryConfig
-	WiremockAPIConfig   WiremockAPIConfig
-	MySQLConfig         MySQLConfig
-	RedisConfig         RedisConfig
-	KafkaProducerConfig KafkaProducerConfig
+	AppConfig         AppConfig
+	SentryConfig      SentryConfig
+	WiremockAPIConfig WiremockAPIConfig
+	MySQLConfig       MySQLConfig
+	RedisConfig       RedisConfig
 }
 
 // AppConfig represents the configuration of the application
@@ -85,14 +84,4 @@ type RedisConfig struct {
 	Timeout  time.Duration `env:"REDIS_TIMEOUT,notEmpty"`
 	MaxRetry int           `env:"REDIS_MAX_RETRY,notEmpty"`
 	PoolSize int           `env:"REDIS_POOL_SIZE,notEmpty"`
-}
-
-// KafkaProducerConfig represents the configuration of the Kafka producer
-type KafkaProducerConfig struct {
-	Username string        `env:"KAFKA_USERNAME,notEmpty"`
-	Password string        `env:"KAFKA_PASSWORD,notEmpty"`
-	Timeout  time.Duration `env:"KAFKA_TIMEOUT,notEmpty"`
-	MaxRetry int           `env:"KAFKA_MAX_RETRY,notEmpty"`
-	Brokers  []string      `env:"KAFKA_BROKERS,notEmpty"`
-	Topic    string        `env:"KAFKA_TOPIC,notEmpty"`
 }

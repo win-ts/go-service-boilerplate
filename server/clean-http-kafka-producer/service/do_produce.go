@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/dto"
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-kafka-producer/dto"
 )
 
 func (s *service) DoKafkaProduce(ctx context.Context) error {

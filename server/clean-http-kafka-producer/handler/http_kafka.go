@@ -7,7 +7,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/win-ts/go-service-boilerplate/server/clean-http-polyrepo/pkg/response"
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-kafka-producer/pkg/response"
 )
 
 // DoProduce handles the request to do kafka produce function
