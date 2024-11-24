@@ -8,16 +8,16 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
+type redisClient struct {
+	client *redis.Client
+}
+
 type redisOptions struct {
 	host     string
 	password string
 	timeout  time.Duration
 	maxRetry int
 	poolSize int
-}
-
-type redisClient struct {
-	client *redis.Client
 }
 
 func newRedis(opts redisOptions) (*redisClient, error) {
