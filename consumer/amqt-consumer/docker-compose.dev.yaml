@@ -1,0 +1,70 @@
+name: service-name
+
+services:
+  app:
+    container_name: service-name
+    build:
+      context: .
+      dockerfile: ./build/docker/Dockerfile.dev
+    volumes:
+      - ./:/src/go
+    working_dir: /src/go
+    command: air -c .air.toml
+    depends_on:
+      - mysql
+      - redis
+      - wiremock
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:8.4.2
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: test
+      MYSQL_ROOT_HOST: "%"
+      TZ: Asia/Bangkok
+    ports:
+      - 3306:3306
+    volumes:
+      - ./.docker-volumes/mysql:/var/lib/mysql
+    networks:
+      - app-network
+
+  redis:
+    image: redis:7.4.0
+    container_name: redis
+    ports:
+      - 6379:6379
+    command: >
+      --requirepass 1234
+    networks:
+      - app-network
+
+  wiremock:
+    image: wiremock/wiremock:3.9.2
+    container_name: wiremock
+    ports:
+      - 1324:8080
+    volumes:
+      - ./tools/wiremock/__files:/home/wiremock/__files
+      - ./tools/wiremock/mappings:/home/wiremock/mappings
+    networks:
+      - app-network
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:4.0-rc-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: 1234
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true
