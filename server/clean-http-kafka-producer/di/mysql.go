@@ -54,7 +54,7 @@ func newMySQL(opts mySQLOptions) (*mySQL, error) {
 		return nil, err
 	}
 
-	slog.Info("[di.newMySQL] connecting to MySQL database",
+	slog.Info("[di.newMySQL] MySQL database connected",
 		slog.String("database", opts.database),
 	)
 
