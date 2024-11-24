@@ -27,7 +27,7 @@ func init() {
 
 func main() {
 	ctx := context.Background()
-	now := time.Now()
+	start := time.Now()
 
 	// Initialize logger
 	env := os.Getenv("APP_ENV_STAGE")
@@ -57,14 +57,14 @@ func main() {
 
 	// Start job
 	{
-		slog.Info("starting job")
+		slog.Info("[main]: starting job")
 
 		cacheRes, err := s.DoSetGetCache(ctx)
 		if err != nil {
 			slog.Error("error - [main] unable to set/get cache", slog.Any("error", err))
 		}
 
-		slog.Info("DoSetGetCache",
+		slog.Info("[main]: DoSetGetCache",
 			slog.Any("result", cacheRes),
 		)
 
@@ -73,10 +73,10 @@ func main() {
 			slog.Error("error - [main] unable to call Wiremock API", slog.Any("error", err))
 		}
 
-		slog.Info("DoWiremock",
+		slog.Info("[main]: DoWiremock",
 			slog.Any("result", wiremockRes),
 		)
 
-		slog.Info("job completed", slog.Any("duration", time.Since(now)))
+		slog.Info("[main]: job completed ✅", slog.Any("duration", time.Since(start)))
 	}
 }

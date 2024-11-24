@@ -1,0 +1,52 @@
+{
+    "name": "Worker Clean Architecture",
+    "description": "Worker with Clean Architecture",
+    "group": "Worker",
+    "recommended": true,
+    "input": {
+        "project": {
+            "from": "$prompt",
+            "question": "Please provide the project name",
+            "example": "project-inari",
+            "required": false,
+            "default": "project-inari"
+        },
+        "domain": {
+            "from": "$prompt",
+            "question": "Please provide the domain name",
+            "example": "subscription",
+            "required": true
+        },
+        "service": {
+            "from": "$prompt",
+            "question": "Please provide the service name",
+            "example": "core-auth-server",
+            "required": true
+        }
+    },
+    "template": {
+        "/win-ts/go-service-boilerplate/worker/clean-worker": {
+            "from": "$inputs",
+            "pattern": "/{{project}}/{{service}}",
+            "glob": "**/go.mod"
+        },
+        "/win-ts/go-service-boilerplate/worker/clean-worker/": {
+            "from": "$inputs",
+            "pattern": "/{{project}}/{{service}}/",
+            "glob": "**/*.go"
+        },
+        "/worker/clean-worker": {
+            "from": "$inputs",
+            "pattern": "",
+            "glob": "**/docker-compose.dev.yaml"
+        },
+        "service-name": {
+            "from": "$inputs",
+            "pattern": "{{service}}"
+        },
+        "domain-common-secret": {
+            "from": "$inputs",
+            "pattern": "{{domain}}-common-secret"
+        }
+    }
+}
