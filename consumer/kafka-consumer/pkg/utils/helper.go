@@ -8,6 +8,15 @@ import (
 	"time"
 )
 
+// EncodeJSONtoBytes encodes an object to a JSON bytes array
+func EncodeJSONtoBytes(obj any) string {
+	data, err := json.Marshal(obj)
+	if err != nil {
+		slog.Error("[utils.EncodeJSONtoBytes] unable to encode JSON", slog.Any("error", err))
+	}
+	return string(data)
+}
+
 // DecodeJSONfromString decodes a JSON string to an object
 func DecodeJSONfromString[T any](data string) *T {
 	obj := new(T)
