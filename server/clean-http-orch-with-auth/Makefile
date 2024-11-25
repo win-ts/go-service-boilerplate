@@ -48,7 +48,7 @@ local.env.prepare:
 alpha.env.prepare:
 	@echo "Preparing .env.generated for alpha envs..."
 	sh ./scripts/get-k8s-alpha-env.sh > .env.generated
-	cat .env.local >> .env.generated
+	cat .env.dev.alpha >> .env.generated
 
 gen.auth.proto:
 	protoc --go_out=. --go_opt=paths=source_relative \

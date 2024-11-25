@@ -48,7 +48,7 @@ local.env.prepare:
 alpha.env.prepare:
 	@echo "Preparing .env.generated for alpha envs..."
 	sh ./scripts/get-k8s-alpha-env.sh > .env.generated
-	cat .env.local >> .env.generated
+	cat .env.dev.alpha >> .env.generated
 
 wiremock:
 	@command -v wiremock-standalone >/dev/null 2>&1 || brew install wiremock-standalone
