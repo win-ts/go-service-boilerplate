@@ -2,6 +2,7 @@ prepare:
 	@echo "Preparing required libraries..."
 	@command -v pre-commit >/dev/null 2>&1 || brew install pre-commit
 	@command -v jq >/dev/null 2>&1 || brew install jq
+	@command -v teleport >/dev/null 2>&1 || { go install github.com/project-inari/teleport@latest; }
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.59.1
 	go install golang.org/x/tools/cmd/goimports@latest
 
@@ -38,6 +39,7 @@ dev.build.push.local:
 dev.up.alpha:
 	@echo "Starting alpha development..."
 	$(MAKE) alpha.env.prepare
+	sh -c '$(MAKE) portforward' 2>&1 &
 	docker compose -f docker-compose.dev.yaml up --scale mysql=0 --scale redis=0 --scale wiremock=0
 
 local.env.prepare:
@@ -58,4 +60,7 @@ swagger:
 	@echo "Generating swagger docs..."
 	swag init
 
-.PHONY: prepare rehooks run dev.up dev.down dev.build.push.local dev.up.alpha local.env.prepare alpha.env.prepare wiremock swagger
+portforward:
+	teleport -s .tpconfig
+
+.PHONY: prepare rehooks run dev.up dev.down dev.build.push.local dev.up.alpha local.env.prepare alpha.env.prepare wiremock swagger portforward
