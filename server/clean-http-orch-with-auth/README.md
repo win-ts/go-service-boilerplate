@@ -2,6 +2,10 @@
 
 GO codebase repository for Inari backend system microservice `service-name`.
 
+[Kustomize Repo](URL)<br>
+[ArgoCD](URL)<br>
+[Confluence Docs](URL)<br>
+
 ## Development
 Prepare the development environment:
 ```bash

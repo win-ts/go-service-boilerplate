@@ -8,7 +8,8 @@ Available Environments
 - uat
 - production (prod)
 
-Code Repo URL: 
+[Code Repo](URL)<br>
+[ArgoCD](URL)<br>
 
 ## How to use
 ### Image Tag
