@@ -26,7 +26,7 @@ spec:
             ]
       containers:
         - name: domain-service
-          image: localhost:5001/domain-service
+          image: asia-southeast1-docker.pkg.dev/inari-non-prod/inari-registry/domain-service
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

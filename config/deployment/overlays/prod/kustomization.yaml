@@ -7,9 +7,9 @@ resources:
   - ../../base
 
 images:
-  - name: localhost:5001/service-name
-    newName: localhost:5001/service-name
-    newTag: latest
+  - name: asia-southeast1-docker.pkg.dev/inari-non-prod/inari-registry/service-name
+    newName: asia-southeast1-docker.pkg.dev/inari-non-prod/inari-registry/service-name
+    newTag: <tag>
 
 patchesStrategicMerge:
   - set_resources.yaml

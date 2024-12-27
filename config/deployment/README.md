@@ -5,7 +5,10 @@ ArgoCD will sync configmap, secrets, and resources config from this repository.
 
 Available Environments
 - alpha
+- uat
 - production (prod)
+
+Code Repo URL: 
 
 ## How to use
 ### Image Tag

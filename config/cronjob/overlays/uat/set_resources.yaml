@@ -1,14 +1,17 @@
 apiVersion: batch/v1
-kind: Job
+kind: CronJob
 metadata:
   name: service-name
 spec:
-  template:
-    metadata:
-      labels:
-        app: service-name
-        env: alpha
+  schedule: "00 19 * * *"
+  failedJobsHistoryLimit: 3
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
     spec:
+      metadata:
+        labels:
+          app: service-name
+          env: uat
       containers:
         - name: service-name
           resources:

@@ -5,6 +5,7 @@ ArgoCD will sync secrets from this repository.
 
 Available Environments
 - alpha
+- uat
 - production (prod)
 
 ## How to use

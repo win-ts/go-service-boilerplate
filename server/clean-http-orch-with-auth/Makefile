@@ -33,8 +33,8 @@ dev.build.push.local:
 	@echo "Building container for pushing to local registry..."
 	$(eval SERVICE=$(shell basename $(CURDIR)))
 	docker build -f ./build/docker/Dockerfile -t $(SERVICE) .
-	docker tag $(SERVICE) localhost:5001/$(SERVICE)
-	docker push localhost:5001/$(SERVICE)
+	docker tag $(SERVICE) asia-southeast1-docker.pkg.dev/inari-non-prod/inari-registry/$(SERVICE)
+	docker push asia-southeast1-docker.pkg.dev/inari-non-prod/inari-registry/$(SERVICE)
 
 dev.up.alpha:
 	@echo "Starting alpha development..."

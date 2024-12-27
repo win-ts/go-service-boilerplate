@@ -13,7 +13,7 @@ spec:
         spec:
           containers:
             - name: service-name
-              image: localhost:5001/service-name
+              image: asia-southeast1-docker.pkg.dev/inari-non-prod/inari-registry/service-name:TAG
               imagePullPolicy: Always
               envFrom:
                 - configMapRef:

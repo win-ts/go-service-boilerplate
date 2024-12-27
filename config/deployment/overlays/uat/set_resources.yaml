@@ -1,13 +1,13 @@
-apiVersion: batch/v1
-kind: Job
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: service-name
 spec:
+  replicas: 1
   template:
     metadata:
       labels:
-        app: service-name
-        env: alpha
+        env: uat
     spec:
       containers:
         - name: service-name

@@ -11,8 +11,8 @@ dev.build.push:
 	$(eval DOMAIN=$(shell basename $(shell dirname $(CURDIR))))
 	$(eval SERVICE=$(shell basename $(CURDIR)))
 	docker build -f ../../build/docker/Dockerfile -t $(SERVICE) --build-arg SERVICE=$(DOMAIN)/$(SERVICE) ../../
-	docker tag $(SERVICE) localhost:5001/$(SERVICE)
-	docker push localhost:5001/$(SERVICE)
+	docker tag $(SERVICE) asia-southeast1-docker.pkg.dev/inari-non-prod/inari-registry/$(SERVICE)
+	docker push asia-southeast1-docker.pkg.dev/inari-non-prod/inari-registry/$(SERVICE)
 
 k8s.dev:
 	@echo "Deploying to local k8s in dev namespace..."
