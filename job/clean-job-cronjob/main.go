@@ -3,11 +3,11 @@ package main
 
 import (
 	"context"
-	"log"
 	"log/slog"
 	"os"
 	"runtime"
 	"time"
+	_ "time/tzdata"
 
 	"gitlab.com/greyxor/slogor"
 
@@ -17,12 +17,6 @@ import (
 
 func init() {
 	runtime.GOMAXPROCS(1)
-
-	location, err := time.LoadLocation("Asia/Bangkok")
-	if err != nil {
-		log.Panicf("failed to set timezone: %v", err)
-	}
-	time.Local = location
 }
 
 func main() {

@@ -2,30 +2,20 @@
 package main
 
 import (
-	"log"
 	"log/slog"
 	"os"
 	"runtime"
 	"time"
+	_ "time/tzdata"
 
 	"gitlab.com/greyxor/slogor"
 
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-kafka-producer/config"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-kafka-producer/di"
-	_ "github.com/win-ts/go-service-boilerplate/server/clean-http-kafka-producer/docs"
 )
-
-// @title API Endpoints for service-name
-// @version 1.0
 
 func init() {
 	runtime.GOMAXPROCS(1)
-
-	location, err := time.LoadLocation("Asia/Bangkok")
-	if err != nil {
-		log.Panicf("failed to set timezone: %v", err)
-	}
-	time.Local = location
 }
 
 func main() {

@@ -2,6 +2,7 @@
 package config
 
 import (
+	"encoding/base64"
 	"log"
 	"log/slog"
 	"sync"
@@ -28,6 +29,7 @@ func New(e string) *Config {
 			log.Panicf("error - [config.New] unable to parse config: %v", err)
 		}
 		config = cfg
+		decodeBase64Field(&config.AppConfig.Secret)
 	})
 
 	return config
@@ -47,6 +49,7 @@ type Config struct {
 type AppConfig struct {
 	Name     string `env:"APP_NAME,notEmpty"`
 	EnvStage string `env:"APP_ENV_STAGE,notEmpty"`
+	Secret string `env:"APP_SECRET,notEmpty"`
 }
 
 // SentryConfig represents the configuration of Sentry.io
@@ -101,4 +104,15 @@ type AMQPConsumerConfig struct {
 	ConsumerExclusive bool   `env:"AMQP_CONSUMER_EXCLUSIVE"`
 	ConsumerNoLocal   bool   `env:"AMQP_CONSUMER_NO_LOCAL"`
 	ConsumerNoWait    bool   `env:"AMQP_CONSUMER_NO_WAIT"`
+}
+
+func decodeBase64Field(fields ...*string) {
+	for _, field := range fields {
+		if field != nil {
+			decoded, err := base64.StdEncoding.DecodeString(*field)
+			if err == nil {
+				*field = string(decoded)
+			}
+		}
+	}
 }

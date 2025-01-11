@@ -19,10 +19,11 @@ import (
 func New(c *config.Config) (service.Port, *sql.DB, *redis.Client) {
 	// Sentry initialization
 	if err := sentry.Init(sentry.ClientOptions{
-		Dsn:              c.SentryConfig.SentryDSN,
-		Debug:            true,
-		EnableTracing:    true,
-		TracesSampleRate: 1.0,
+		Dsn:                c.SentryConfig.SentryDSN,
+		Debug:              true,
+		EnableTracing:      true,
+		TracesSampleRate:   1.0,
+		ProfilesSampleRate: 1.0,
 	}); err != nil {
 		slog.Error("error - [main.New] sentry initialization failed", slog.Any("error", err))
 	}

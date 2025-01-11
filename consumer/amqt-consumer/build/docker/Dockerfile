@@ -14,5 +14,6 @@ RUN go build -o /app .
 #==============================================================================
 FROM alpine:latest
 
+ENV TZ=Asia/Bangkok
 COPY --from=builder /app ./
 ENTRYPOINT [ "./app" ]
