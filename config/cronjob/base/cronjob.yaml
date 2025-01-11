@@ -23,3 +23,5 @@ spec:
                 - secretRef:
                     name: domain-common-secret
           restartPolicy: Never
+          imagePullSecrets:
+            - name: gcp-artifact-registry
