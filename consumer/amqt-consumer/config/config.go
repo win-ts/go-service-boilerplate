@@ -29,7 +29,7 @@ func New(e string) *Config {
 			log.Panicf("error - [config.New] unable to parse config: %v", err)
 		}
 		config = cfg
-		decodeBase64Field(&config.AppConfig.Secret)
+		decodeBase64Field()
 	})
 
 	return config
@@ -40,7 +40,7 @@ type Config struct {
 	AppConfig          AppConfig
 	SentryConfig       SentryConfig
 	WiremockAPIConfig  WiremockAPIConfig
-	MySQLConfig        MySQLConfig
+	PostgreSQLConfig   PostgreSQLConfig
 	RedisConfig        RedisConfig
 	AMQPConsumerConfig AMQPConsumerConfig
 }
@@ -49,7 +49,6 @@ type Config struct {
 type AppConfig struct {
 	Name     string `env:"APP_NAME,notEmpty"`
 	EnvStage string `env:"APP_ENV_STAGE,notEmpty"`
-	Secret string `env:"APP_SECRET,notEmpty"`
 }
 
 // SentryConfig represents the configuration of Sentry.io
@@ -68,16 +67,16 @@ type WiremockAPIConfig struct {
 	MaxTransactionsPerSecond int           `env:"WIREMOCK_API_MAX_TRANSACTIONS_PER_SECOND"`
 }
 
-// MySQLConfig represents the configuration of the MySQL database
-type MySQLConfig struct {
-	Host         string        `env:"MYSQL_HOST,notEmpty"`
-	Username     string        `env:"MYSQL_USERNAME,notEmpty"`
-	Password     string        `env:"MYSQL_PASSWORD,notEmpty"`
-	Database     string        `env:"MYSQL_DATABASE,notEmpty"`
-	Timeout      time.Duration `env:"MYSQL_TIMEOUT,notEmpty"`
-	MaxIdleConns int           `env:"MYSQL_MAX_IDLE_CONNS,notEmpty"`
-	MaxOpenConns int           `env:"MYSQL_MAX_OPEN_CONNS,notEmpty"`
-	MaxLifetime  time.Duration `env:"MYSQL_MAX_LIFETIME,notEmpty"`
+// PostgreSQLConfig represents the configuration of the PostgreSQL database
+type PostgreSQLConfig struct {
+	Host         string        `env:"POSTGRES_HOST,notEmpty"`
+	Username     string        `env:"POSTGRES_USERNAME,notEmpty"`
+	Password     string        `env:"POSTGRES_PASSWORD,notEmpty"`
+	Database     string        `env:"POSTGRES_DATABASE,notEmpty"`
+	Timeout      string        `env:"POSTGRES_TIMEOUT,notEmpty"`
+	MaxIdleConns int           `env:"POSTGRES_MAX_IDLE_CONNS,notEmpty"`
+	MaxOpenConns int           `env:"POSTGRES_MAX_OPEN_CONNS,notEmpty"`
+	MaxLifetime  time.Duration `env:"POSTGRES_MAX_LIFETIME,notEmpty"`
 }
 
 // RedisConfig represents the configuration of the Redis cache

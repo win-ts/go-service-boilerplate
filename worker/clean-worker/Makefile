@@ -8,7 +8,7 @@ prepare:
 	@command -v pre-commit >/dev/null 2>&1 || brew install pre-commit
 	@command -v jq >/dev/null 2>&1 || brew install jq
 	@command -v teleport >/dev/null 2>&1 || { go install github.com/project-inari/teleport@latest; }
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.59.1
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 	go install golang.org/x/tools/cmd/goimports@latest
 
 	@echo "Initializing environment for git..."
@@ -68,7 +68,7 @@ dev.up.alpha:
 	@echo "Starting alpha development..."
 	$(MAKE) alpha.env.prepare
 	sh -c '$(MAKE) portforward' 2>&1 &
-	docker compose -f docker-compose.dev.yaml up --scale mysql=0 --scale redis=0 --scale wiremock=0
+	docker compose -f docker-compose.dev.yaml up --scale postgres=0 --scale redis=0 --scale wiremock=0
 
 ## local.env.prepare: prepare .env.generated for local envs
 .PHONY: local.env.prepare
@@ -89,12 +89,6 @@ alpha.env.prepare:
 wiremock:
 	@command -v wiremock-standalone >/dev/null 2>&1 || brew install wiremock-standalone
 	wiremock --port 1324 --verbose --local-response-templating --root-dir tools/wiremock
-
-## swagger: generate swagger docs
-.PHONY: swagger
-swagger:
-	@echo "Generating swagger docs..."
-	swag init
 
 ## portforward: portforward to k8s cluster from tpconfig
 .PHONY: portforward

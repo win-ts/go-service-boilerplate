@@ -36,19 +36,19 @@ func New(c *config.Config) (service.Port, *sql.DB, *redis.Client) {
 		MaxTransactionsPerSecond: c.WiremockAPIConfig.MaxTransactionsPerSecond,
 	})
 
-	// MySQL initialization
-	mysqlDB, err := newMySQL(mySQLOptions{
-		host:         c.MySQLConfig.Host,
-		username:     c.MySQLConfig.Username,
-		password:     c.MySQLConfig.Password,
-		database:     c.MySQLConfig.Database,
-		timeout:      c.MySQLConfig.Timeout,
-		maxIdleConns: c.MySQLConfig.MaxIdleConns,
-		maxOpenConns: c.MySQLConfig.MaxOpenConns,
-		maxLifetime:  c.MySQLConfig.MaxLifetime,
+	// PostgreSQL initialization
+	postgresDB, err := newPostgreSQL(postgreSQLOptions{
+		host:         c.PostgreSQLConfig.Host,
+		username:     c.PostgreSQLConfig.Username,
+		password:     c.PostgreSQLConfig.Password,
+		database:     c.PostgreSQLConfig.Database,
+		timeout:      c.PostgreSQLConfig.Timeout,
+		maxIdleConns: c.PostgreSQLConfig.MaxIdleConns,
+		maxOpenConns: c.PostgreSQLConfig.MaxOpenConns,
+		maxLifetime:  c.PostgreSQLConfig.MaxLifetime,
 	})
 	if err != nil {
-		log.Panicf("error - [main.New] unable to connect to MySQL: %v", err)
+		log.Panicf("error - [main.New] unable to connect to PostgreSQL: %v", err)
 	}
 
 	// Redis initialization
@@ -74,9 +74,9 @@ func New(c *config.Config) (service.Port, *sql.DB, *redis.Client) {
 	})
 
 	databaseRepo := repository.NewDatabaseRepository(repository.DatabaseRepositoryConfig{
-		Database: c.MySQLConfig.Database,
+		Database: c.PostgreSQLConfig.Database,
 	}, repository.DatabaseRepositoryDependencies{
-		Client: mysqlDB.client,
+		Client: postgresDB.client,
 	})
 
 	cacheRepo := repository.NewCacheRepository(repository.CacheRepositoryConfig{}, repository.CacheRepositoryDependencies{
@@ -89,5 +89,5 @@ func New(c *config.Config) (service.Port, *sql.DB, *redis.Client) {
 		WiremockAPIRepository: wiremockAPIRepo,
 		DatabaseRepository:    databaseRepo,
 		CacheRepository:       cacheRepo,
-	}), mysqlDB.client, redisClient.client
+	}), postgresDB.client, redisClient.client
 }
