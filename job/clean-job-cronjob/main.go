@@ -13,6 +13,7 @@ import (
 
 	"github.com/win-ts/go-service-boilerplate/job/clean-job-cronjob/config"
 	"github.com/win-ts/go-service-boilerplate/job/clean-job-cronjob/di"
+	"github.com/win-ts/go-service-boilerplate/job/clean-job-cronjob/middleware"
 )
 
 func init() {
@@ -23,20 +24,27 @@ func main() {
 	ctx := context.Background()
 	start := time.Now()
 
+	// Initiaize config
+	cfg := config.New()
+
 	// Initialize logger
-	env := os.Getenv("APP_ENV_STAGE")
 	var logger *slog.Logger
-	if env == "" || env == "LOCAL" {
+	if cfg.LogConfig.Level == "DEBUG" {
 		logger = slog.New(slogor.NewHandler(os.Stdout, slogor.SetTimeFormat(time.Stamp), slogor.ShowSource()))
 	} else {
 		logger = slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
 			AddSource: true,
+			ReplaceAttr: func(_ []string, a slog.Attr) slog.Attr {
+				if cfg.LogConfig.MaskSensitiveData {
+					value := middleware.MaskSensitiveData(a.Key, a.Value.Any())
+					return slog.Any(a.Key, value)
+				}
+
+				return a
+			},
 		}))
 	}
 	slog.SetDefault(logger)
-
-	// Initiaize config
-	cfg := config.New(env)
 
 	// Initialize dependency injection
 	s, mysqlClient, redisClient := di.New(cfg)

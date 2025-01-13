@@ -12,6 +12,7 @@ import (
 
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-kafka-producer/config"
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-kafka-producer/di"
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-kafka-producer/middleware"
 )
 
 func init() {
@@ -19,20 +20,27 @@ func init() {
 }
 
 func main() {
+	// Initiaize config
+	cfg := config.New()
+
 	// Initialize logger
-	env := os.Getenv("APP_ENV_STAGE")
 	var logger *slog.Logger
-	if env == "" || env == "LOCAL" {
+	if cfg.LogConfig.Level == "DEBUG" {
 		logger = slog.New(slogor.NewHandler(os.Stdout, slogor.SetTimeFormat(time.Stamp), slogor.ShowSource()))
 	} else {
 		logger = slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
 			AddSource: true,
+			ReplaceAttr: func(_ []string, a slog.Attr) slog.Attr {
+				if cfg.LogConfig.MaskSensitiveData {
+					value := middleware.MaskSensitiveData(a.Key, a.Value.Any())
+					return slog.Any(a.Key, value)
+				}
+
+				return a
+			},
 		}))
 	}
 	slog.SetDefault(logger)
-
-	// Initiaize config
-	cfg := config.New(env)
 
 	// Initialize dependency injection
 	di.New(cfg)

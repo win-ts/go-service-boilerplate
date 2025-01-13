@@ -6,6 +6,7 @@ import (
 	"context"
 	"crypto/tls"
 	"encoding/json"
+	"log/slog"
 	"net/http"
 	"time"
 
@@ -20,6 +21,7 @@ type Options struct {
 	Timeout                  time.Duration
 	InsecureSkipVerify       bool
 	MaxTransactionsPerSecond int
+	DisableLogTrace          bool
 }
 
 // NewHTTPClient creates a new HTTP client with the given options
@@ -31,7 +33,11 @@ func NewHTTPClient(opts Options) *http.Client {
 	httpClient.RetryWaitMax = 5 * time.Second
 	httpClient.HTTPClient.Timeout = opts.Timeout
 
-	t := http.DefaultTransport.(*http.Transport).Clone()
+	t, ok := http.DefaultTransport.(*http.Transport)
+	if !ok {
+		slog.Error("error - [pkg.httpclient] DefaultTransport is not of type *http.Transport")
+	}
+	t = t.Clone()
 	t.MaxIdleConns = opts.MaxConns
 	t.MaxConnsPerHost = opts.MaxConns
 	t.MaxIdleConnsPerHost = opts.MaxConns
@@ -39,7 +45,10 @@ func NewHTTPClient(opts Options) *http.Client {
 		t.TLSClientConfig = &tls.Config{MinVersion: tls.VersionTLS12}
 	}
 	t.TLSClientConfig.InsecureSkipVerify = opts.InsecureSkipVerify
-	httpClient.HTTPClient.Transport = t
+	httpClient.HTTPClient.Transport = &CustomTransport{
+		transport:       t,
+		disableLogTrace: opts.DisableLogTrace,
+	}
 
 	if opts.MaxTransactionsPerSecond != 0 {
 		limiter := rate.NewLimiter(rate.Limit(opts.MaxTransactionsPerSecond), 1)

@@ -11,35 +11,35 @@ import (
 
 	sentryecho "github.com/getsentry/sentry-go/echo"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	slogecho "github.com/samber/slog-echo"
+	echoMiddleware "github.com/labstack/echo/v4/middleware"
 
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-amqp-producer/config"
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-amqp-producer/middleware"
 )
 
 func setupServer(ctx context.Context, e *echo.Echo, c *config.Config) {
 	// Request Timeout
-	e.Use(middleware.TimeoutWithConfig(middleware.TimeoutConfig{
-		Skipper:      middleware.DefaultSkipper,
+	e.Use(echoMiddleware.TimeoutWithConfig(echoMiddleware.TimeoutConfig{
+		Skipper:      echoMiddleware.DefaultSkipper,
 		ErrorMessage: "Error: Request Timeout",
 		Timeout:      30 * time.Second,
 	}))
 
 	// CORS
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		Skipper:      middleware.DefaultSkipper,
+	e.Use(echoMiddleware.CORSWithConfig(echoMiddleware.CORSConfig{
+		Skipper:      echoMiddleware.DefaultSkipper,
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.PATCH, echo.DELETE},
 	}))
 
 	// Body Limit
-	e.Use(middleware.BodyLimit("10M"))
+	e.Use(echoMiddleware.BodyLimit("10M"))
 
 	// Recover
-	e.Use(middleware.Recover())
+	e.Use(echoMiddleware.Recover())
 
 	// Logger
-	e.Use(slogecho.New(slog.Default()))
+	e.Use(middleware.IncomingLogTrace())
 
 	// Sentry
 	e.Use(sentryecho.New(sentryecho.Options{}))

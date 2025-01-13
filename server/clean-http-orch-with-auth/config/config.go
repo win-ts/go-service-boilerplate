@@ -4,6 +4,7 @@ package config
 import (
 	"log"
 	"log/slog"
+	"os"
 	"sync"
 	"time"
 
@@ -15,8 +16,9 @@ var once sync.Once
 var config *Config
 
 // New loads the configuration from the .env file
-func New(e string) *Config {
+func New() *Config {
 	once.Do(func() {
+		e := os.Getenv("APP_ENV_STAGE")
 		if e == "" || e == "LOCAL" {
 			if err := godotenv.Load(".env.generated"); err != nil {
 				slog.Warn("[config.New] unable to load .env.generated file", slog.Any("error", err))
@@ -36,6 +38,7 @@ func New(e string) *Config {
 // Config represents the configuration of the server
 type Config struct {
 	AppConfig         AppConfig
+	LogConfig         LogConfig
 	SentryConfig      SentryConfig
 	WiremockAPIConfig WiremockAPIConfig
 	GRPCAuthConfig    GRPCAuthConfig
@@ -46,6 +49,12 @@ type AppConfig struct {
 	Name     string `env:"APP_NAME,notEmpty"`
 	Port     string `env:"APP_PORT,notEmpty"`
 	EnvStage string `env:"APP_ENV_STAGE,notEmpty"`
+}
+
+// LogConfig represents the configuration of the logger
+type LogConfig struct {
+	Level             string `env:"LOG_LEVEL,notEmpty"`
+	MaskSensitiveData bool   `env:"LOG_MASK_SENSITIVE_DATA,notEmpty"`
 }
 
 // SentryConfig represents the configuration of Sentry.io
