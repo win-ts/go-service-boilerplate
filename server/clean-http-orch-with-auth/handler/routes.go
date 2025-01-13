@@ -4,14 +4,12 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	echoSwagger "github.com/swaggo/echo-swagger"
 
 	"github.com/win-ts/go-service-boilerplate/server/clean-http-orch-with-auth/pkg/response"
 )
 
 func (h *httpHandler) initRoutes(e *echo.Echo) {
 	e.GET("/health", h.HealthCheck)
-	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	v1 := e.Group("/v1", func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {

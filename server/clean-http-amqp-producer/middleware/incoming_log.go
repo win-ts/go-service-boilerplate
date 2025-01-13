@@ -12,6 +12,7 @@ import (
 )
 
 const (
+	healthCheckPath = "/health"
 	incoming = "INCOMING"
 )
 
@@ -19,6 +20,10 @@ const (
 func IncomingLogTrace() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
+			if c.Request().URL.Path == healthCheckPath {
+				return next(c)
+			}
+
 			now := time.Now()
 
 			// request
