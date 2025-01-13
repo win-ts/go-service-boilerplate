@@ -1,0 +1,21 @@
+// Version
+syntax = "proto3";
+
+// Package name
+option go_package = "github.com/project-inari/core-auth-server/protobuf/authPb";
+
+// Structure
+message VerifyTokenReq {
+    string token = 1;
+}
+
+message VerifyTokenRes {
+    string username = 1;
+    string uid = 2;
+    bool success = 3;
+}
+
+// Methods
+service AuthGrpcService {
+    rpc VerifyToken(VerifyTokenReq) returns (VerifyTokenRes);
+}

@@ -5,26 +5,21 @@ import (
 
 	"google.golang.org/grpc"
 
-	authPb "github.com/win-ts/go-service-boilerplate/server/clean-http-orch-with-auth/protobuf/auth"
+	"github.com/win-ts/go-service-boilerplate/server/clean-http-orch-with-auth/protobuf/authPb"
 )
 
 type authMiddlewareRepository struct {
 	authClient authPb.AuthGrpcServiceClient
 }
 
-// AuthMiddlewareRepositoryConfig represents the configuration for auth middleware repository
-type AuthMiddlewareRepositoryConfig struct {
-}
-
 // AuthMiddlewareRepositoryDependencies represents the dependencies for auth middleware repository
 type AuthMiddlewareRepositoryDependencies struct {
-	GrpcClient *grpc.ClientConn
+	GRPCClient *grpc.ClientConn
 }
 
 // NewAuthMiddlewareRepository creates a new auth middleware repository
-func NewAuthMiddlewareRepository(c AuthMiddlewareRepositoryConfig, d AuthMiddlewareRepositoryDependencies) AuthMiddlewareRepository {
-	_ = c
-	authClient := authPb.NewAuthGrpcServiceClient(d.GrpcClient)
+func NewAuthMiddlewareRepository(d AuthMiddlewareRepositoryDependencies) AuthMiddlewareRepository {
+	authClient := authPb.NewAuthGrpcServiceClient(d.GRPCClient)
 	return &authMiddlewareRepository{authClient}
 }
 

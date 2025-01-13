@@ -4,7 +4,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.4.0
 // - protoc             v4.25.2
-// source: protobuf/auth/auth.proto
+// source: protobuf/authPb/auth.proto
 
 package authPb
 
@@ -21,9 +21,7 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	AuthGrpcService_DeleteUser_FullMethodName      = "/AuthGrpcService/DeleteUser"
-	AuthGrpcService_GetUidFromEmail_FullMethodName = "/AuthGrpcService/GetUidFromEmail"
-	AuthGrpcService_VerifyToken_FullMethodName     = "/AuthGrpcService/VerifyToken"
+	AuthGrpcService_VerifyToken_FullMethodName = "/AuthGrpcService/VerifyToken"
 )
 
 // AuthGrpcServiceClient is the client API for AuthGrpcService service.
@@ -32,8 +30,6 @@ const (
 //
 // Methods
 type AuthGrpcServiceClient interface {
-	DeleteUser(ctx context.Context, in *DeleteUserReq, opts ...grpc.CallOption) (*DeleteUserRes, error)
-	GetUidFromEmail(ctx context.Context, in *GetUidFromEmailReq, opts ...grpc.CallOption) (*GetUidFromEmailRes, error)
 	VerifyToken(ctx context.Context, in *VerifyTokenReq, opts ...grpc.CallOption) (*VerifyTokenRes, error)
 }
 
@@ -43,26 +39,6 @@ type authGrpcServiceClient struct {
 
 func NewAuthGrpcServiceClient(cc grpc.ClientConnInterface) AuthGrpcServiceClient {
 	return &authGrpcServiceClient{cc}
-}
-
-func (c *authGrpcServiceClient) DeleteUser(ctx context.Context, in *DeleteUserReq, opts ...grpc.CallOption) (*DeleteUserRes, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DeleteUserRes)
-	err := c.cc.Invoke(ctx, AuthGrpcService_DeleteUser_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *authGrpcServiceClient) GetUidFromEmail(ctx context.Context, in *GetUidFromEmailReq, opts ...grpc.CallOption) (*GetUidFromEmailRes, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetUidFromEmailRes)
-	err := c.cc.Invoke(ctx, AuthGrpcService_GetUidFromEmail_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *authGrpcServiceClient) VerifyToken(ctx context.Context, in *VerifyTokenReq, opts ...grpc.CallOption) (*VerifyTokenRes, error) {
@@ -81,8 +57,6 @@ func (c *authGrpcServiceClient) VerifyToken(ctx context.Context, in *VerifyToken
 //
 // Methods
 type AuthGrpcServiceServer interface {
-	DeleteUser(context.Context, *DeleteUserReq) (*DeleteUserRes, error)
-	GetUidFromEmail(context.Context, *GetUidFromEmailReq) (*GetUidFromEmailRes, error)
 	VerifyToken(context.Context, *VerifyTokenReq) (*VerifyTokenRes, error)
 	mustEmbedUnimplementedAuthGrpcServiceServer()
 }
@@ -91,12 +65,6 @@ type AuthGrpcServiceServer interface {
 type UnimplementedAuthGrpcServiceServer struct {
 }
 
-func (UnimplementedAuthGrpcServiceServer) DeleteUser(context.Context, *DeleteUserReq) (*DeleteUserRes, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteUser not implemented")
-}
-func (UnimplementedAuthGrpcServiceServer) GetUidFromEmail(context.Context, *GetUidFromEmailReq) (*GetUidFromEmailRes, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUidFromEmail not implemented")
-}
 func (UnimplementedAuthGrpcServiceServer) VerifyToken(context.Context, *VerifyTokenReq) (*VerifyTokenRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VerifyToken not implemented")
 }
@@ -111,42 +79,6 @@ type UnsafeAuthGrpcServiceServer interface {
 
 func RegisterAuthGrpcServiceServer(s grpc.ServiceRegistrar, srv AuthGrpcServiceServer) {
 	s.RegisterService(&AuthGrpcService_ServiceDesc, srv)
-}
-
-func _AuthGrpcService_DeleteUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteUserReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthGrpcServiceServer).DeleteUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: AuthGrpcService_DeleteUser_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthGrpcServiceServer).DeleteUser(ctx, req.(*DeleteUserReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _AuthGrpcService_GetUidFromEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUidFromEmailReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthGrpcServiceServer).GetUidFromEmail(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: AuthGrpcService_GetUidFromEmail_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthGrpcServiceServer).GetUidFromEmail(ctx, req.(*GetUidFromEmailReq))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _AuthGrpcService_VerifyToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -175,18 +107,10 @@ var AuthGrpcService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*AuthGrpcServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "DeleteUser",
-			Handler:    _AuthGrpcService_DeleteUser_Handler,
-		},
-		{
-			MethodName: "GetUidFromEmail",
-			Handler:    _AuthGrpcService_GetUidFromEmail_Handler,
-		},
-		{
 			MethodName: "VerifyToken",
 			Handler:    _AuthGrpcService_VerifyToken_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "protobuf/auth/auth.proto",
+	Metadata: "protobuf/authPb/auth.proto",
 }

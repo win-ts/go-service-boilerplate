@@ -39,9 +39,9 @@ func New() *Config {
 type Config struct {
 	AppConfig         AppConfig
 	LogConfig         LogConfig
+	GRPCAuthConfig    GRPCAuthConfig
 	SentryConfig      SentryConfig
 	WiremockAPIConfig WiremockAPIConfig
-	GRPCAuthConfig    GRPCAuthConfig
 }
 
 // AppConfig represents the configuration of the application
@@ -55,6 +55,11 @@ type AppConfig struct {
 type LogConfig struct {
 	Level             string `env:"LOG_LEVEL,notEmpty"`
 	MaskSensitiveData bool   `env:"LOG_MASK_SENSITIVE_DATA,notEmpty"`
+}
+
+// GRPCAuthConfig represents the configuration of the Auth GRPC client
+type GRPCAuthConfig struct {
+	URL string `env:"GRPC_AUTH_URL,notEmpty"`
 }
 
 // SentryConfig represents the configuration of Sentry.io
@@ -71,9 +76,4 @@ type WiremockAPIConfig struct {
 	Timeout                  time.Duration `env:"WIREMOCK_API_TIMEOUT,notEmpty"`
 	InsecureSkipVerify       bool          `env:"WIREMOCK_API_INSECURE_SKIP_VERIFY,notEmpty"`
 	MaxTransactionsPerSecond int           `env:"WIREMOCK_API_MAX_TRANSACTIONS_PER_SECOND"`
-}
-
-// GRPCAuthConfig represents the configuration of the Auth GRPC client
-type GRPCAuthConfig struct {
-	URL string `env:"GRPC_AUTH_URL,notEmpty"`
 }

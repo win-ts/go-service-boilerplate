@@ -54,8 +54,8 @@ func New(c *config.Config) {
 	})
 
 	// Repository initialization
-	authRepo := repository.NewAuthMiddlewareRepository(repository.AuthMiddlewareRepositoryConfig{}, repository.AuthMiddlewareRepositoryDependencies{
-		GrpcClient: grpcClient.client,
+	authRepo := repository.NewAuthMiddlewareRepository(repository.AuthMiddlewareRepositoryDependencies{
+		GRPCClient: grpcClient.client,
 	})
 
 	exampleRepo := repository.NewExampleRepository(repository.ExampleRepositoryConfig{})

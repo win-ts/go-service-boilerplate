@@ -2,7 +2,6 @@ package service
 
 import (
 	"log/slog"
-	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -11,7 +10,7 @@ import (
 func (s *service) Auth(c echo.Context, token string) (echo.Context, error) {
 	ctx := c.Request().Context()
 
-	if err := s.authMiddlewareRepository.VerifyToken(ctx, strings.TrimPrefix(token, "Bearer ")); err != nil {
+	if err := s.authMiddlewareRepository.VerifyToken(ctx, token); err != nil {
 		slog.Error("error verifying token",
 			slog.Any("error", err),
 		)
