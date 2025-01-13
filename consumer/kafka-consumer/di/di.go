@@ -22,7 +22,7 @@ func New(c *config.Config) {
 	// Sentry initialization
 	if err := sentry.Init(sentry.ClientOptions{
 		Dsn:                c.SentryConfig.SentryDSN,
-		Debug:              true,
+		Debug:              false,
 		EnableTracing:      true,
 		TracesSampleRate:   1.0,
 		ProfilesSampleRate: 1.0,
