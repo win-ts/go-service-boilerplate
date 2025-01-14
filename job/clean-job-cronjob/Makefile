@@ -67,7 +67,7 @@ dev.up.alpha:
 	@echo "Starting alpha development..."
 	$(MAKE) alpha.env.prepare
 	sh -c '$(MAKE) portforward' 2>&1 &
-	docker compose -f docker-compose.dev.yaml up --scale postgres=0 --scale redis=0 --scale wiremock=0
+	docker compose -f docker-compose.dev.yaml up --scale mysql=0 --scale redis=0 --scale wiremock=0
 
 ## local.env.prepare: prepare .env.generated for local envs
 .PHONY: local.env.prepare
@@ -93,6 +93,12 @@ wiremock:
 .PHONY: portforward
 portforward:
 	teleport -s .tpconfig
+
+## portforward.db: portforward to k8s cluster for mysql and redis database
+.PHONY: portforward.db
+portforward.db:
+	kubectl port-forward service/mysql -n data-tools 3306:3306 & \
+	kubectl port-forward service/redis -n data-tools 6379:6379 &
 
 ## test: run all tests
 .PHONY: test

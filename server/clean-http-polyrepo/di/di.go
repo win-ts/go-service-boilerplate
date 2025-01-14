@@ -45,23 +45,23 @@ func New(c *config.Config) {
 		MaxTransactionsPerSecond: c.WiremockAPIConfig.MaxTransactionsPerSecond,
 	})
 
-	// PostgreSQL initialization
-	postgresDB, err := newPostgreSQL(postgreSQLOptions{
-		host:         c.PostgreSQLConfig.Host,
-		username:     c.PostgreSQLConfig.Username,
-		password:     c.PostgreSQLConfig.Password,
-		database:     c.PostgreSQLConfig.Database,
-		timeout:      c.PostgreSQLConfig.Timeout,
-		maxIdleConns: c.PostgreSQLConfig.MaxIdleConns,
-		maxOpenConns: c.PostgreSQLConfig.MaxOpenConns,
-		maxLifetime:  c.PostgreSQLConfig.MaxLifetime,
+	// MySQL initialization
+	mysqlDB, err := newMySQL(mySQLOptions{
+		host:         c.MySQLConfig.Host,
+		username:     c.MySQLConfig.Username,
+		password:     c.MySQLConfig.Password,
+		database:     c.MySQLConfig.Database,
+		timeout:      c.MySQLConfig.Timeout,
+		maxIdleConns: c.MySQLConfig.MaxIdleConns,
+		maxOpenConns: c.MySQLConfig.MaxOpenConns,
+		maxLifetime:  c.MySQLConfig.MaxLifetime,
 	})
 	if err != nil {
-		log.Panicf("error - [main.New] unable to connect to PostgreSQL: %v", err)
+		log.Panicf("error - [main.New] unable to connect to MySQL: %v", err)
 	}
 	defer func() {
-		if err := postgresDB.client.Close(); err != nil {
-			slog.Error("error - [main.New] unable to close PostgreSQL connection", slog.Any("error", err))
+		if err := mysqlDB.client.Close(); err != nil {
+			slog.Error("error - [main.New] unable to close MySQL connection", slog.Any("error", err))
 		}
 	}()
 
@@ -93,9 +93,9 @@ func New(c *config.Config) {
 	})
 
 	databaseRepo := repository.NewDatabaseRepository(repository.DatabaseRepositoryConfig{
-		Database: c.PostgreSQLConfig.Database,
+		Database: c.MySQLConfig.Database,
 	}, repository.DatabaseRepositoryDependencies{
-		Client: postgresDB.client,
+		Client: mysqlDB.client,
 	})
 
 	cacheRepo := repository.NewCacheRepository(repository.CacheRepositoryConfig{}, repository.CacheRepositoryDependencies{

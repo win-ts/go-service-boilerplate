@@ -95,6 +95,12 @@ wiremock:
 portforward:
 	teleport -s .tpconfig
 
+## portforward.db: portforward to k8s cluster for mysql and redis database
+.PHONY: portforward.db
+portforward.db:
+	kubectl port-forward service/mysql -n data-tools 3306:3306 & \
+	kubectl port-forward service/redis -n data-tools 6379:6379 &
+
 ## test: run all tests
 .PHONY: test
 test: tidy

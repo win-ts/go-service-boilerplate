@@ -4,42 +4,41 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"log"
 	"log/slog"
 	"time"
 
-	// PostgreSQL driver
-	_ "github.com/lib/pq"
+	// MySQL driver
+	_ "github.com/go-sql-driver/mysql"
 )
 
-type postgreSQL struct {
+type mySQL struct {
 	client *sql.DB
 }
 
-type postgreSQLOptions struct {
+type mySQLOptions struct {
 	username     string
 	password     string
 	host         string
 	database     string
-	timeout      string
+	timeout      time.Duration
 	maxIdleConns int
 	maxOpenConns int
 	maxLifetime  time.Duration
 }
 
-func newPostgreSQL(opts postgreSQLOptions) (*postgreSQL, error) {
+func newMySQL(opts mySQLOptions) (*mySQL, error) {
 	dsn := fmt.Sprintf(
-		"postgres://%s:%s@%s/%s?statement_timeout=%s&sslmode=disable",
+		"%s:%s@tcp(%s)/%s?checkConnLiveness=false&loc=Local&parseTime=true&readTimeout=%s&timeout=%s&writeTimeout=%s&maxAllowedPacket=0",
 		opts.username,
 		opts.password,
 		opts.host,
 		opts.database,
 		opts.timeout,
+		opts.timeout,
+		opts.timeout,
 	)
 
-	log.Printf("[di.newPostgreSQL] connecting to PostgreSQL database: %s", dsn)
-
-	db, err := sql.Open("postgres", dsn)
+	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		return nil, err
 	}
@@ -55,9 +54,9 @@ func newPostgreSQL(opts postgreSQLOptions) (*postgreSQL, error) {
 		return nil, err
 	}
 
-	slog.Info("[di.newPostgreSQL] PostgreSQL database connected",
+	slog.Info("[di.newMySQL] MySQL database connected",
 		slog.String("database", opts.database),
 	)
 
-	return &postgreSQL{db}, nil
+	return &mySQL{db}, nil
 }

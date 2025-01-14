@@ -11,24 +11,24 @@ services:
     working_dir: /src/go
     command: air -c .air.toml
     depends_on:
-      - postgres
+      - mysql
       - redis
       - wiremock
     networks:
       - app-network
 
-  postgres:
-    image: postgres:14.15-alpine3.20
-    container_name: postgres
+  mysql:
+    image: mysql:8.4.2
+    container_name: mysql
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: 1234
-      POSTGRES_DB: test
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: user
+      MYSQL_ROOT_HOST: "%"
       TZ: Asia/Bangkok
     ports:
-      - 5432:5432
+      - 3306:3306
     volumes:
-      - ./.docker-volumes/postgres:/var/lib/postgresql/data
+      - ./.docker-volumes/mysql:/var/lib/mysql
     networks:
       - app-network
 
