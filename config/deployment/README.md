@@ -8,8 +8,8 @@ Available Environments
 - uat
 - production (prod)
 
-[Code Repo](URL)<br>
-[ArgoCD](URL)<br>
+[Code Repo](https://github.com/project-inari/service-name)<br>
+[ArgoCD_ALPHA](https://argocd-alpha.inari-th.com/applications/argocd/service-name?view=tree&resource=)<br>
 
 ## How to use
 ### Image Tag

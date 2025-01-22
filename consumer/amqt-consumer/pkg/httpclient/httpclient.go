@@ -99,6 +99,10 @@ type Response[T any] struct {
 
 // Do sends a request to the given URL with the given method, header, and payload
 func Do[REQ, RES any](ctx context.Context, client *http.Client, method, url string, header map[string]string, payload REQ) (*Response[RES], error) {
+	if header["Content-Type"] == "" {
+		header["Content-Type"] = "application/json"
+	}
+
 	req, err := newRequest(ctx, method, url, header, payload)
 	if err != nil {
 		return nil, err
